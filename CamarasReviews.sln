@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamarasReviews", "CamarasReviews\CamarasReviews.csproj", "{02A09268-758F-474E-8031-8718D536C601}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamarasReviews.DataServices", "CamarasReviews.DataServices\CamarasReviews.DataServices.csproj", "{1478151E-3B06-4345-886A-3CA432109974}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamarasReviews.DataModels", "CamarasReviews.DataModels\CamarasReviews.DataModels.csproj", "{72A135E8-048F-4075-AE6A-51FBB2E78315}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamarasReviews.Helpers", "CamarasReviews.Helpers\CamarasReviews.Helpers.csproj", "{D8F766DA-3231-46A7-8ACF-CEC533F0BA2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamarasReviews.DataRepositories", "CamarasReviews.DataRepositories\CamarasReviews.DataRepositories.csproj", "{2006AD16-FD55-4ED2-8F66-3966F4DDC0B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamarasReviews.Utilities", "CamarasReviews.Utilities\CamarasReviews.Utilities.csproj", "{9DFCC67C-7661-4354-8F37-40F028642AAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02A09268-758F-474E-8031-8718D536C601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A09268-758F-474E-8031-8718D536C601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A09268-758F-474E-8031-8718D536C601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A09268-758F-474E-8031-8718D536C601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1478151E-3B06-4345-886A-3CA432109974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1478151E-3B06-4345-886A-3CA432109974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1478151E-3B06-4345-886A-3CA432109974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1478151E-3B06-4345-886A-3CA432109974}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72A135E8-048F-4075-AE6A-51FBB2E78315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72A135E8-048F-4075-AE6A-51FBB2E78315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72A135E8-048F-4075-AE6A-51FBB2E78315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72A135E8-048F-4075-AE6A-51FBB2E78315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8F766DA-3231-46A7-8ACF-CEC533F0BA2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F766DA-3231-46A7-8ACF-CEC533F0BA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8F766DA-3231-46A7-8ACF-CEC533F0BA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8F766DA-3231-46A7-8ACF-CEC533F0BA2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2006AD16-FD55-4ED2-8F66-3966F4DDC0B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2006AD16-FD55-4ED2-8F66-3966F4DDC0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2006AD16-FD55-4ED2-8F66-3966F4DDC0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2006AD16-FD55-4ED2-8F66-3966F4DDC0B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DFCC67C-7661-4354-8F37-40F028642AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DFCC67C-7661-4354-8F37-40F028642AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DFCC67C-7661-4354-8F37-40F028642AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DFCC67C-7661-4354-8F37-40F028642AAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F34B8D1A-ED6B-4E2E-BC15-935C445832F9}
+	EndGlobalSection
+EndGlobal

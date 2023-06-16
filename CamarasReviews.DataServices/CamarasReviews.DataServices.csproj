@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CamarasReviews.DataModels\CamarasReviews.DataModels.csproj" />
+    <ProjectReference Include="..\CamarasReviews.DataRepositories\CamarasReviews.DataRepositories.csproj" />
+    <ProjectReference Include="..\CamarasReviews.Helpers\CamarasReviews.Helpers.csproj" />
+    <ProjectReference Include="..\CamarasReviews.Utilities\CamarasReviews.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>
