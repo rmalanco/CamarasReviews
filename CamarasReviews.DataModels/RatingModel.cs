@@ -6,9 +6,11 @@ namespace CamarasReviews.Models
     {
         [Key]
         public Guid RatingId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es requerido.")]
+        [Display(Name = "Calificacion")]        
         public string RatingName { get; set; }
         [Required]
+        [Display(Name = "Valor")]
         public int RatingValue { get; set; }
     }
 }

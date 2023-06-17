@@ -37,14 +37,13 @@ public class ReviewModel
     [Display(Name = "Activo")]
     public bool IsActive { get; set; }
     [Required]
-    public Guid AuthorId { get; set; }
+    public string AuthorId { get; set; }
     [ForeignKey("AuthorId")]
     public ApplicationUser Author { get; set; }
     [Required]
     public Guid ProductId { get; set; }
     [ForeignKey("ProductId")]
     public ProductModel Product { get; set; }
-    public ICollection<ReviewImageModel> ReviewImages { get; set; } // la relacion de arriva es de uno a muchos, una review puede tener muchas imagenes
-    public ICollection<ReviewCommentModel> ReviewComments { get; set; } 
+    public ICollection<ReviewImageModel> ReviewImages { get; set; }  
     public ICollection<ReviewRatingModel> ReviewRatings { get; set; }
 }

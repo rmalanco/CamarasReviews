@@ -20,7 +20,7 @@ public class ProductModel
     public string SKU { get; set; }
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [Display(Name = "Precio")]
-    public decimal Price { get; set; }
+    public double Price { get; set; }
     [Required]
     public Guid CategoryId { get; set; }
     [ForeignKey("CategoryId")]

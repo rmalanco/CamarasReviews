@@ -10,17 +10,16 @@ namespace CamarasReviews.Data
             : base(options)
         {
         }
-        // Aqui se agregan los DbSet para cada modelo que se quiera agregar a la base de datos
-        DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        DbSet<BrandModel> Brands { get; set; }
-        DbSet<CategoryModel> Categories { get; set; }
-        DbSet<FeatureModel> Features { get; set; }
-        DbSet<ProductImageModel> ProductImages { get; set; }
-        DbSet<ProductModel> Products { get; set; }
-        DbSet<RatingModel> Ratings { get; set; }
-        DbSet<ReviewCommentModel> ReviewComments { get; set; }
-        DbSet<ReviewImageModel> ReviewImages { get; set; }
-        DbSet<ReviewModel> Reviews { get; set; }
-        DbSet<ReviewRatingModel> ReviewRatings { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<BrandModel> Brands { get; set; }
+        public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<FeatureModel> Features { get; set; }
+        public DbSet<ProductImageModel> ProductImages { get; set; }
+        public DbSet<ProductModel> Products { get; set; }
+        public DbSet<RatingModel> Ratings { get; set; }
+        public DbSet<ReviewCommentModel> ReviewComments { get; set; }
+        public DbSet<ReviewImageModel> ReviewImages { get; set; }
+        public DbSet<ReviewModel> Reviews { get; set; }
+        public DbSet<ReviewRatingModel> ReviewRatings { get; set; }
     }
 }

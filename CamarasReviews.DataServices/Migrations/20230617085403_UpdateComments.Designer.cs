@@ -4,6 +4,7 @@ using CamarasReviews.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CamarasReviews.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230617085403_UpdateComments")]
+    partial class UpdateComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.CategoryModel", b =>
@@ -85,7 +88,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.FeatureModel", b =>
@@ -118,7 +121,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("FeatureId");
 
-                    b.ToTable("Features", (string)null);
+                    b.ToTable("Features");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ProductImageModel", b =>
@@ -150,7 +153,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages", (string)null);
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ProductModel", b =>
@@ -200,7 +203,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.RatingModel", b =>
@@ -218,7 +221,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("RatingId");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewCommentModel", b =>
@@ -256,7 +259,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("ReviewComments", (string)null);
+                    b.ToTable("ReviewComments");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewImageModel", b =>
@@ -288,7 +291,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("ReviewImages", (string)null);
+                    b.ToTable("ReviewImages");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewModel", b =>
@@ -345,7 +348,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewRatingModel", b =>
@@ -366,7 +369,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("ReviewRatings", (string)null);
+                    b.ToTable("ReviewRatings");
                 });
 
             modelBuilder.Entity("FeatureModelProductModel", b =>
@@ -381,7 +384,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ProductsProductId");
 
-                    b.ToTable("FeatureModelProductModel", (string)null);
+                    b.ToTable("FeatureModelProductModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

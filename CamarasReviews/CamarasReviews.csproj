@@ -18,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CamarasReviews.DataServices\CamarasReviews.DataServices.csproj" />
+    <Folder Include="Areas\Admin\Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
+    <ProjectReference Include="..\CamarasReviews.DataRepositories\CamarasReviews.DataRepositories.csproj" />
   </ItemGroup>
 
 </Project>
