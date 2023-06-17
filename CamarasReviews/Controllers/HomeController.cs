@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace CamarasReviews.Areas.Home.Controllers
+namespace CamarasReviews.Controllers
 {
-    [Area("Home")]
+    //[Area("Home")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,11 +15,6 @@ namespace CamarasReviews.Areas.Home.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
