@@ -46,4 +46,5 @@ public class ReviewModel
     public ProductModel Product { get; set; }
     public ICollection<ReviewImageModel> ReviewImages { get; set; }  
     public ICollection<ReviewRatingModel> ReviewRatings { get; set; }
+    public ICollection<ReviewTagModel> ReviewTags { get; set; }
 }

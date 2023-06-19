@@ -25,9 +25,5 @@ public class ReviewCommentModel
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
-    public bool IsActive { get; set; }
-    [Required]
-    public string UserId { get; set; }
-    [ForeignKey("UserId")]
-    public ApplicationUser User { get; set; }
+    public bool IsActive { get; set; }    
 }

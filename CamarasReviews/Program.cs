@@ -1,4 +1,5 @@
 using CamarasReviews.Data;
+using CamarasReviews.Models;
 using CamarasReviews.Repository;
 using CamarasReviews.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -12,8 +13,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("CamarasReviews.DataServices")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddIdentity<ApplicationUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI();
+
 builder.Services.AddControllersWithViews();
 
 // agregamos el contenedor de trabajo "IUnitOfWork" para que se pueda inyectar en los controladores
