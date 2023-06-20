@@ -12,6 +12,6 @@ namespace CamarasReviews.Models
         [Key]
         public Guid TagId { get; set; }
         public string TagName { get; set; }
-        public virtual ICollection<ReviewTagModel> ReviewTags { get; set; }        
+        public  ICollection<ReviewModel> Reviews { get; set; }
     }
 }

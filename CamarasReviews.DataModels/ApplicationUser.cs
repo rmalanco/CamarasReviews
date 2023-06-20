@@ -34,8 +34,11 @@ namespace CamarasReviews.Models
         public string Country { get; set; }
 
         // relacion de comentarios ya que un usuario puede tener muchos comentarios
-        public ICollection<ReviewCommentModel> Comments { get; set; }
+        public ICollection<CommentModel> Comments { get; set; }
         // relacion de reviews ya que un Autor puede tener muchas reviews
         public ICollection<ReviewModel> Reviews { get; set; }
+        // relacion de votos ya que un usuario puede tener muchos votos
+        public ICollection<RatingModel> Ratings { get; set; }
+
     }
 }

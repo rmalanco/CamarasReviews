@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CamarasReviews.Models
 {
@@ -6,11 +7,12 @@ namespace CamarasReviews.Models
     {
         [Key]
         public Guid RatingId { get; set; }
-        [Required(ErrorMessage = "El campo {0} es requerido.")]
-        [Display(Name = "Calificacion")]        
-        public string RatingName { get; set; }
-        [Required]
-        [Display(Name = "Valor")]
         public int RatingValue { get; set; }
+
+        // relacion de votos ya que un usuario puede tener muchos votos
+        public ApplicationUser User { get; set; }
+
+        // relacion de votos ya que un review puede tener muchos votos
+        public ReviewModel Review { get; set; }
     }
 }

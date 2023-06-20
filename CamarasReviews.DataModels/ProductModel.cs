@@ -40,7 +40,7 @@ public class ProductModel
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
     public bool IsActive { get; set; }
-    public ICollection<ProductImageModel> ProductImages { get; set; }
-    public ICollection<ReviewModel> Reviews { get; set; }
-    public ICollection<FeatureModel> Features { get; set; }
+    public  ICollection<ProductImageModel> ProductImages { get; set; }
+    public  ICollection<ReviewModel> Reviews { get; set; }
+    public  ICollection<FeatureModel> Features { get; set; }
 }

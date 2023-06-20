@@ -1,47 +1,130 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CamarasReviews</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CamarasReviews.styles.css" asp-append-version="true" />
+    <meta charset="utf-8">
+    <title>@ViewData["Title"] - Cámaras Reviews</title>
+    <!-- mobile responsive meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <meta name="description" content="Cámaras Reviews">
+    <meta name="author" content="rmalanco.com">
+    <!-- plugins -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFWJ0bbck.woff2" as="font" crossorigin="anonymous" style="font-display: optional;">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:600%7cOpen&#43;Sans&amp;display=swap" media="screen" as="style">
+    <link rel="stylesheet" href="~/home/plugins/bootstrap/bootstrap.min.css" as="style">
+    <link rel="stylesheet" href="~/home/plugins/themify-icons/themify-icons.css" as="style">
+    <link rel="stylesheet" href="~/home/plugins/slick/slick.css" as="style">
+    <link rel="stylesheet" href="~/home/css/site.css" as="style" asp-append-version="true">
+    <link rel="stylesheet" href="~/CamarasReviews.styles.css" as="style" asp-append-version="true">
+    <!--Favicon-->
+    <link rel="shortcut icon" href="~/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="~/images/favicon.png" type="image/x-icon">
 </head>
 <body>
+    <!-- navigation -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CamarasReviews</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light px-0">
+                <a class="navbar-brand" asp-area="Home" asp-controller="Home" asp-action="Index">
+                    <h3 class="mb-0">Cámaras Reviews</h3>
+                </a>
+                <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
+                    <i class="ti-menu"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse text-center" id="navigation">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="Home" asp-controller="Home" asp-action="Index">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Reviews" asp-controller="Home" asp-action="Index">Reviews</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Categorías<i class="ti-angle-down ml-1"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="Reviews" asp-controller="Home" asp-action="Index">Cámaras</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Home" asp-controller="About" asp-action="Index">Sobre Nosotros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Home" asp-controller="Contact" asp-action="Index">Contacto</a>
                         </li>
                     </ul>
-                    <partial name="_LoginPartial" />
+                </div>
+                <partial name="_LoginPartial" />
+            </nav>
+        </div>
+    </header>
+    <!-- /navigation -->
+    <!-- main content -->
+    <section class="section">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </section>
+    <!-- /main content -->
+    <!-- footer -->
+    <footer class="section-sm pb-0 border-top border-default">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-md-3 mb-4">
+                    <a class="mb-4 d-block" href="index.html">
+                        <h3 class="mb-0">Cámaras Reviews</h3>
+                    </a>
+                    <p>
+                        Somos un blog dedicado a la reseña de cámaras fotográficas y de video, así como de accesorios
+                        relacionados con la fotografía y el video.
+                    </p>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-6 mb-4">
+                    <h6 class="mb-4">Enlaces Rápidos</h6>
+                    <ul class="list-unstyled footer-list">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                        <li><a asp-area="Reviews" asp-controller="Reviews" asp-action="Index">Reviews</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">Sobre Nosotros</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-6 mb-4">
+                    <h6 class="mb-4">Redes Sociales</h6>
+                    <ul class="list-unstyled footer-list">
+                        <li><a href="#">facebook</a></li>
+                        <li><a href="#">twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">github</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h6 class="mb-4">Suscríbete</h6>
+                    <form class="subscription" action="javascript:void(0)" method="post">
+                        <div class="position-relative">
+                            <i class="ti-email email-icon"></i>
+                            <input type="email" class="form-control" placeholder="Email" required>
+                        </div>
+                        <button class="btn btn-primary btn-block rounded" type="submit">Suscríbete Ahora</button>
+                    </form>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - CamarasReviews - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="scroll-top">
+                <a href="javascript:void(0);" id="scrollTop"><i class="ti-angle-up"></i></a>
+            </div>
+            <div class="text-center">
+                <p class="content">&copy; 2023 <a href="index.html">Cámaras Reviews</a>. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- /footer -->
+    <!-- JS Plugins -->
+    <script src="~/home/plugins/jquery/jquery.min.js" as="script"></script>
+    <script src="~/home/plugins/bootstrap/bootstrap.min.js" as="script"></script>
+    <script src="~/home/plugins/slick/slick.min.js" as="script"></script>
+    <script src="~/home/js/site.js" as="script" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -13,13 +13,13 @@ namespace CamarasReviews.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<BrandModel> Brands { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<CommentModel> Comments { get; set; }
         public DbSet<FeatureModel> Features { get; set; }
         public DbSet<ProductImageModel> ProductImages { get; set; }
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<RatingModel> Ratings { get; set; }
-        public DbSet<ReviewCommentModel> ReviewComments { get; set; }
         public DbSet<ReviewImageModel> ReviewImages { get; set; }
         public DbSet<ReviewModel> Reviews { get; set; }
-        public DbSet<ReviewRatingModel> ReviewRatings { get; set; }
+        public DbSet<TagModel> Tags { get; set; }
     }
 }

@@ -88,6 +88,44 @@ namespace CamarasReviews.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("CamarasReviews.Models.CommentModel", b =>
+                {
+                    b.Property<Guid>("ReviewCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ReviewCommentId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("CamarasReviews.Models.FeatureModel", b =>
                 {
                     b.Property<Guid>("FeatureId")
@@ -209,54 +247,22 @@ namespace CamarasReviews.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RatingName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("RatingValue")
                         .HasColumnType("int");
-
-                    b.HasKey("RatingId");
-
-                    b.ToTable("Ratings");
-                });
-
-            modelBuilder.Entity("CamarasReviews.Models.ReviewCommentModel", b =>
-                {
-                    b.Property<Guid>("ReviewCommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("ReviewId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ReviewCommentId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("RatingId");
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("ReviewComments");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewImageModel", b =>
@@ -348,48 +354,6 @@ namespace CamarasReviews.Data.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("CamarasReviews.Models.ReviewRatingModel", b =>
-                {
-                    b.Property<Guid>("ReviewRatingId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RatingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ReviewId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ReviewRatingId");
-
-                    b.HasIndex("RatingId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.ToTable("ReviewRatings");
-                });
-
-            modelBuilder.Entity("CamarasReviews.Models.ReviewTagModel", b =>
-                {
-                    b.Property<Guid>("ReviewTagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ReviewId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ReviewTagId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ReviewTagModel");
-                });
-
             modelBuilder.Entity("CamarasReviews.Models.TagModel", b =>
                 {
                     b.Property<Guid>("TagId")
@@ -402,7 +366,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("TagModel");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("FeatureModelProductModel", b =>
@@ -626,6 +590,21 @@ namespace CamarasReviews.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ReviewModelTagModel", b =>
+                {
+                    b.Property<Guid>("ReviewsReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagsTagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ReviewsReviewId", "TagsTagId");
+
+                    b.HasIndex("TagsTagId");
+
+                    b.ToTable("ReviewModelTagModel");
+                });
+
             modelBuilder.Entity("CamarasReviews.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -659,6 +638,21 @@ namespace CamarasReviews.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("CamarasReviews.Models.CommentModel", b =>
+                {
+                    b.HasOne("CamarasReviews.Models.ApplicationUser", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("CamarasReviews.Models.ReviewModel", "Review")
+                        .WithMany()
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
+                });
+
             modelBuilder.Entity("CamarasReviews.Models.ProductImageModel", b =>
                 {
                     b.HasOne("CamarasReviews.Models.ProductModel", "Product")
@@ -689,19 +683,21 @@ namespace CamarasReviews.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("CamarasReviews.Models.ReviewCommentModel", b =>
+            modelBuilder.Entity("CamarasReviews.Models.RatingModel", b =>
                 {
-                    b.HasOne("CamarasReviews.Models.ApplicationUser", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("CamarasReviews.Models.ReviewModel", "Review")
                         .WithMany()
                         .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CamarasReviews.Models.ApplicationUser", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Review");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewImageModel", b =>
@@ -732,44 +728,6 @@ namespace CamarasReviews.Data.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("CamarasReviews.Models.ReviewRatingModel", b =>
-                {
-                    b.HasOne("CamarasReviews.Models.RatingModel", "Rating")
-                        .WithMany()
-                        .HasForeignKey("RatingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CamarasReviews.Models.ReviewModel", "Review")
-                        .WithMany("ReviewRatings")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Rating");
-
-                    b.Navigation("Review");
-                });
-
-            modelBuilder.Entity("CamarasReviews.Models.ReviewTagModel", b =>
-                {
-                    b.HasOne("CamarasReviews.Models.ReviewModel", "Review")
-                        .WithMany("ReviewTags")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CamarasReviews.Models.TagModel", "Tag")
-                        .WithMany("ReviewTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Review");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("FeatureModelProductModel", b =>
@@ -838,6 +796,21 @@ namespace CamarasReviews.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ReviewModelTagModel", b =>
+                {
+                    b.HasOne("CamarasReviews.Models.ReviewModel", null)
+                        .WithMany()
+                        .HasForeignKey("ReviewsReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CamarasReviews.Models.TagModel", null)
+                        .WithMany()
+                        .HasForeignKey("TagsTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CamarasReviews.Models.BrandModel", b =>
                 {
                     b.Navigation("Products");
@@ -858,20 +831,13 @@ namespace CamarasReviews.Data.Migrations
             modelBuilder.Entity("CamarasReviews.Models.ReviewModel", b =>
                 {
                     b.Navigation("ReviewImages");
-
-                    b.Navigation("ReviewRatings");
-
-                    b.Navigation("ReviewTags");
-                });
-
-            modelBuilder.Entity("CamarasReviews.Models.TagModel", b =>
-                {
-                    b.Navigation("ReviewTags");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Ratings");
 
                     b.Navigation("Reviews");
                 });

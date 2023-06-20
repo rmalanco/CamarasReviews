@@ -44,7 +44,6 @@ public class ReviewModel
     public Guid ProductId { get; set; }
     [ForeignKey("ProductId")]
     public ProductModel Product { get; set; }
-    public ICollection<ReviewImageModel> ReviewImages { get; set; }  
-    public ICollection<ReviewRatingModel> ReviewRatings { get; set; }
-    public ICollection<ReviewTagModel> ReviewTags { get; set; }
+    public ICollection<ReviewImageModel> ReviewImages { get; set; }
+    public ICollection<TagModel> Tags { get; set; }
 }
