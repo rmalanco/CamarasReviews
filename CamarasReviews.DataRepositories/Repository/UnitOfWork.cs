@@ -6,24 +6,28 @@ namespace CamarasReviews.Repository;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _db;
-    // Aquí se agregan los repositorios que se van a utilizar
-    // Ejemplo:
-    // private IGenericRepository GenericRepository { get; private set; }
+    public IReviewRepository Review { get; private set; }
+    public IBrandRepository Brand { get; private set; }
+    public IFeatureRepository Feature { get; private set; }
+    public ICategoryRepository Category { get; private set; }
+    public IProductRepository Product { get; private set; }
 
     public UnitOfWork(ApplicationDbContext db)
     {
         _db = db;
-        // Aquí se agregan los repositorios que se van a utilizar
-        // Ejemplo:
-        // GenericRepository = new GenericRepository(_db);
+        Review = new ReviewRepository(_db);
+        Brand = new BrandRepository(_db);
+        Feature = new FeatureRepository(_db);
+        Category = new CategoryRepository(_db);
+        Product = new ProductRepository(_db);
     }
 
-    public void Dispose()
+    public void Save()
     {
         _db.SaveChanges();
     }
 
-    public void Save()
+    public void Dispose()
     {
         _db.Dispose();
         GC.SuppressFinalize(this);

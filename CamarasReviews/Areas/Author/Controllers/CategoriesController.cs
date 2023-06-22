@@ -4,19 +4,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CamarasReviews.Models;
+using CamarasReviews.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CamarasReviews.Areas.Admin.Controllers
+namespace CamarasReviews.Areas.Author.Controllers
 {
-    [Area("Admin")]
-    public class HomeController : Controller
+    [Area("Author")]
+    public class CategoriesController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public CategoriesController(IUnitOfWork unitOfWork)
         {
-            _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()

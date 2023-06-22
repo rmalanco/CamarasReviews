@@ -8,15 +8,27 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>@ViewData["Title"] - Cámaras Reviews</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="~/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+    
 </head>
 
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark" aria-label="barra de navegación">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark" aria-labelledby="menú de navegación">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" asp-area="Admin" asp-controller="Home" asp-action="Index">Cámaras Reviews</a>
+        @* <a class="navbar-brand ps-3" asp-area="Admin" asp-controller="Home" asp-action="Index">Cámaras Reviews</a> *@
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="navbar-brand ps-3" asp-area="Admin" asp-controller="Home" asp-action="Index">Cámaras Reviews</a>
+        }
+        @if (User.IsInRole("Author"))
+        {
+            <a class="navbar-brand ps-3" asp-area="Author" asp-controller="Home" asp-action="Index">Cámaras Reviews</a>
+        }
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
             <i class="fas fa-bars"></i>
@@ -28,7 +40,7 @@
                     aria-expanded="false">
                     <i class="fas fa-user fa-fw"></i>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <ul class="dropdown-menu dropdown-menu-end" aria-label="menú desplegable">
                     <li>
                         <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Manage Account</a>
                     </li>
@@ -56,8 +68,14 @@
                             </div>
                             Dashboard
                         </a>
+                        <a class="nav-link" asp-area="Author" asp-controller="Home" asp-action="Index">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            Dashboard
+                        </a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            data-bs-target="#collapseCamarasReviews" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-list"></i>
                             </div>
@@ -66,14 +84,13 @@
                                 <i class="fas fa-angle-down"></i>
                             </div>
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne">
+                        <div class="collapse" id="collapseCamarasReviews" aria-labelledby="headingOne">
                             <nav class="sb-sidenav-menu-nested nav" aria-label="breadcrumb">
-                                <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                <a class="nav-link" asp-area="Author" asp-controller="Reviews" asp-action="Index">Listado de Reviews</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            data-bs-target="#collapseProductos" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-list"></i>
                             </div>
@@ -82,10 +99,25 @@
                                 <i class="fas fa-angle-down"></i>
                             </div>
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne">
+                        <div class="collapse" id="collapseProductos" aria-labelledby="headingOne">
                             <nav class="sb-sidenav-menu-nested nav" aria-label="breadcrumb">
-                                <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                <a class="nav-link" asp-area="Author" asp-controller="Brands" asp-action="Index">Listado de Marcas</a>
+                                <a class="nav-link" asp-area="Author" asp-controller="Categories" asp-action="Index">Listado de Categorías</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseAdmin" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-list"></i>
+                            </div>
+                            Administración
+                            <div class="sb-sidenav-collapse-arrow">
+                                <i class="fas fa-angle-down"></i>
+                            </div>
+                        </a>
+                        <div class="collapse" id="collapseAdmin" aria-labelledby="headingOne">
+                            <nav class="sb-sidenav-menu-nested nav" aria-label="breadcrumb">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Usuarios" asp-action="Index">Listado de Usuarios</a>
                             </nav>
                         </div>
                     </div>
@@ -120,12 +152,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script src="~/admin/js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="~/admin/assets/demo/chart-area-demo.js"></script>
-    <script src="~/admin/assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-        crossorigin="anonymous"></script>
-    <script src="~/admin/js/datatables-simple-demo.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

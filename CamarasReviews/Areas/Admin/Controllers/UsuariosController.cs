@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging;
 namespace CamarasReviews.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class DashboardController : Controller
+    public class UsuariosController : Controller
     {
-        private readonly ILogger<DashboardController> _logger;
+        private readonly ILogger<UsuariosController> _logger;
 
-        public DashboardController(ILogger<DashboardController> logger)
+        public UsuariosController(ILogger<UsuariosController> logger)
         {
             _logger = logger;
         }

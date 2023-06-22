@@ -1,5 +1,78 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+  ViewData["Title"] = "Dashboard autor";
 }
+<!-- Encabezado de la página -->
+<h1 class="mt-4">@ViewData["Title"]</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">@ViewData["Title"]</li>
+</ol>
+<!-- End Encabezado de la página -->
+<!-- Cuerpo de la página -->
+<!--Contador de reviews-->
+<div class="row">
+  <!-- Total de reviews -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-primary text-white mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Total de reviews</h5>
+        <div class="card-text fs-1">123</div>
+      </div>
+    </div>
+  </div>
+  <!-- Total de comentarios -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-warning text-white mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Total de comentarios</h5>
+        <div class="card-text fs-1">123</div>
+      </div>
+    </div>
+  </div>
+  <!-- Total de vistas a los reviews -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-success text-white mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Total de vistas a los reviews</h5>
+        <div class="card-text fs-1">123</div>
+      </div>
+    </div>
+  </div>
+  <!-- Total de likes a los reviews -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-danger text-white mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Total de likes a los reviews</h5>
+        <div class="card-text fs-1">123</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Contador de reviews-->
+
+<div class="card mb-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Tus últimos reviews realizados
+  </div>
+  <div class="card-body">
+    <table
+      id="datatablesSimple"
+      aria-describedby="datatablesSimple_info"
+      class="dataTable"
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Office</th>
+          <th>Age</th>
+          <th>Start date</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+<!-- End Cuerpo de la página -->
+

@@ -1,0 +1,54 @@
+@{
+  ViewData["Title"] = "Listado de Reviews";
+}
+<!-- Encabezado de la página -->
+<h1 class="mt-4">@ViewData["Title"]</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">@ViewData["Title"]</li>
+</ol>
+<!-- End Encabezado de la página -->
+
+<!-- Botones de la página para agregar y exportar -->
+<div class="row">
+  <div class="col-xl-12 col-md-12 mb-4">
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <a class="btn btn-primary" asp-action="Create">
+        <i class="fas fa-plus-circle"></i> Agregar nuevo review
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido de la página -->
+<!-- Tabla de datos -->
+<div class="row">
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Tus últimos reviews realizados
+    </div>
+    <div class="card-body">
+      <table
+        id="datatablesSimple"
+        aria-describedby="datatablesSimple_info"
+        class="dataTable"
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start date</th>
+            <th>Salary</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- End Tabla de datos -->
+<!-- End Contenido de la página -->
+
+

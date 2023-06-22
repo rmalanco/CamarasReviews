@@ -13,11 +13,11 @@ public class ReviewModel
     public string Title { get; set; }
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [MaxLength(1000, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
-    [Display(Name = "Descripcion Corta")]
+    [Display(Name = "Descripción Corta")]
     public string ShortDescription { get; set; }
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [MaxLength(5000, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
-    [Display(Name = "Descripcion Larga")]
+    [Display(Name = "Descripción Completa")]
     public string LongDescription { get; set; }
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [Display(Name = "Pros")]
@@ -25,13 +25,13 @@ public class ReviewModel
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [Display(Name = "Contras")]
     public string Cons { get; set; }
-    [Display(Name = "Fecha de Creacion")]
+    [Display(Name = "Fecha de Creación")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime CreatedDate { get; set; } = DateTime.Now;
-    [Display(Name = "Fecha de Modificacion")]
+    [Display(Name = "Fecha de Modificación")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime? ModifiedDate { get; set; }
-    [Display(Name = "Fecha de Eliminacion")]
+    [Display(Name = "Fecha de Eliminación")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
@@ -44,6 +44,7 @@ public class ReviewModel
     public Guid ProductId { get; set; }
     [ForeignKey("ProductId")]
     public ProductModel Product { get; set; }
+    [Display(Name = "Imágenes de la Reseña")]
     public ICollection<ReviewImageModel> ReviewImages { get; set; }
     public ICollection<TagModel> Tags { get; set; }
 }
