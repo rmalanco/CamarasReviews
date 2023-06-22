@@ -1,185 +1,273 @@
+@model CamarasReviews.Models.BrandModel
 @{
     ViewData["Title"] = "Listado de Marcas";
 }
-@model IEnumerable<CamarasReviews.Models.BrandModel>
+
 <!-- Encabezado de la página -->
 <h1 class="mt-4">@ViewData["Title"]</h1>
 <ol class="breadcrumb mb-4">
-  <li class="breadcrumb-item active">@ViewData["Title"]</li>
+    <li class="breadcrumb-item active">@ViewData["Title"]</li>
 </ol>
 <!-- End Encabezado de la página -->
-
 <!-- Botones de la página para agregar y exportar -->
 <div class="row">
-  <div class="col-xl-12 col-md-12 mb-4">
-    <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarMarca">
-            <i class="fas fa-plus"></i>
-            Agregar marca
-        </button>
+    <div class="col-xl-12 col-md-12 mb-4">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarMarca" id="btnAgregarMarca">
+                <i class="fas fa-plus"></i>
+                Agregar marca
+            </button>
+        </div>
     </div>
-  </div>
 </div>
 <!-- End Botones de la página para agregar y exportar -->
 <!-- Modal para agregar -->
 <!-- Modal -->
 <div class="modal fade" id="modalAgregarMarca" tabindex="-1" aria-labelledby="modalAgregarMarcaLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="modalAgregarMarcaLabel">Agregar Marca</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="nombreMarca" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombreMarca" placeholder="Ingrese el nombre de la marca">
-          </div>
-          <div class="mb-3">
-            <label for="descripcionMarca" class="form-label">Descripción</label>
-            <textarea class="form-control" id="descripcionMarca" rows="3" placeholder="Ingrese la descripción de la marca"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="btnAgregarMarca" onclick="agregarMarca('/Author/Brands/Upsert')" class="btn btn-primary">Agregar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="fromUpsert" method="POST">
+                <input type="hidden" id="brandId" name="brandId" asp-for="BrandId" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalAgregarMarcaLabel">Agregar Marca</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" id="nombreMarca" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" id="descripcionMarca"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnAgregarMarcaModal" class="btn btn-primary">Guardar</button>
+                    <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 </div>
 <!-- End Modal para agregar -->
 <!-- End Botones de la página para agregar y exportar -->
-
 <!-- Contenido de la página -->
 <!-- Tabla de datos -->
 <div class="row">
-  <div class="card mb-4">
-    <div class="card-header">
-      <i class="fas fa-table me-1"></i>
-      Tus últimos reviews realizados
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Listado de marcas
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered" id="tablaMarcas" aria-describedby="dataTable_info" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Fecha de creación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
-    <div class="card-body">
-      <table class="table table-striped table-bordered" id="tablaMarcas" aria-describedby="dataTable_info" style="width: 100%;">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Fecha de creación</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
 </div>
 <!-- End Tabla de datos -->
 <!-- End Contenido de la página -->
-
 <!-- Scripts de la página -->
 @section Scripts {
     <script>
         $(document).ready(function () {
-            tablaMarcas();
-        });
-
-        function tablaMarcas() {
             $("#tablaMarcas").DataTable({
-                "ajax": {
-                    "url": "/Author/Brands/GetAll",
-                    "type": "GET",
-                    "datatype": "json"
+                ajax: {
+                    url: "/Author/Brands/GetAll"
                 },
-                "columns": [
-                    { "data": "name", "width": "20%" },
-                    { "data": "description", "width": "20%" },
-                    { "data": "createdDate", "width": "20%" },
+                columns: [
+                    { data: "name", width: "40%" },
+                    { data: "description", width: "35%" },
                     {
-                        "data": "id",
-                        "render": function (data) {
-                            return `<div class="text-center">
-                                        <a href="/Author/Brands/Upsert/${data}" class='btn btn-sm btn-success rounded-circle' style='cursor:pointer;'>
-                                            <i class='far fa-edit'></i>
-                                        </a>
-                                        &nbsp;
-                                        <a onclick=Delete("/Author/Brands/Delete/${data}") class='btn btn-sm btn-danger rounded-circle' style='cursor:pointer;'>
-                                            <i class='far fa-trash-alt'></i>
-                                        </a>
+                        data: "createdDate",
+                        render: function (data) {
+                            return moment(data).format('DD/MM/YYYY HH:mm:ss');
+                        }, width: "15%" },
+                    {
+                        data: "brandId",
+                        render: function (data, type, row) {
+                            if(row.isActive == true){
+                                return `
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarMarca" onclick="GetBrand('/Author/Brands/GetByID/${data}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" onclick="Delete('/Author/Brands/Delete/${data}')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
                                     </div>
                                     `;
-                        }, "width": "40%"
+                            }
+                            else{
+                                return `
+                                    <div class="text-center">                                        
+                                        <button type="button" class="btn btn-success" onclick="Active('/Author/Brands/Active/${data}')">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </div>
+                                    `;
+                            }
+                        }, width: "10%"
                     }
                 ],
-                "language": {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                      "first": "Primero",
-                      "last": "Ultimo",
-                      "next": "Siguiente",
-                      "previous": "Anterior",
-                    },
+                language: {
+                  decimal: "",
+                  emptyTable: "No hay información",
+                  info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                  infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
+                  infoFiltered: "(Filtrado de _MAX_ total entradas)",
+                  infoPostFix: "",
+                  thousands: ",",
+                  lengthMenu: "Mostrar _MENU_ Entradas",
+                  loadingRecords: "Cargando...",
+                  processing: "Procesando...",
+                  search: "Buscar:",
+                  zeroRecords: "Sin resultados encontrados",
+                  paginate: {
+                    first: "Primero",
+                    last: "Ultimo",
+                    next: "Siguiente",
+                    previous: "Anterior",
+                  },
                 },
-                "width": "100%"
+            });
+        });
+
+        $("#btnAgregarMarcaModal").click(function (event) {
+            event.preventDefault();
+            let brandId = $("#brandId").val();
+            let name = $("#nombreMarca").val();
+            let description = $("#descripcionMarca").val();            
+            if (brandId == "" || brandId == null) {
+                let url = "/Author/Brands/Create";
+                let data = { name: name, description: description };
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success) {
+                            console.log(data);
+                            $("#modalAgregarMarca").modal("hide");
+                            $("#fromUpsert").trigger("reset");
+                            $("#tablaMarcas").DataTable().ajax.reload();
+                            toastr.success(data.message);
+                        } else {
+                            console.log(data);
+                            toastr.error(data.message);
+                        }
+                    }
+                });
+            }
+            else {
+                let url = "/Author/Brands/Update";
+                let data = { brandId: brandId, name: name, description: description };
+                $.ajax({
+                    type: "PUT",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success) {
+                            console.log(data);
+                            $("#modalAgregarMarca").modal("hide");
+                            $("#fromUpsert").trigger("reset");
+                            $("#tablaMarcas").DataTable().ajax.reload();
+                            toastr.success(data.message);
+                        } else {
+                            console.log(data);
+                            toastr.error(data.message);
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#btnAgregarMarca").click(function (event) {
+            event.preventDefault();
+            //cambiar el titulo del modal
+            $("#modalAgregarMarcaLabel").html("Agregar Marca");
+            //limpiar el formulario
+            $("#fromUpsert").trigger("reset");
+            //cambiar el texto del botón
+            $("#btnAgregarMarcaModal").html("Guardar");
+        });
+
+        function GetBrand(url) {
+            $("#modalAgregarMarcaLabel").html("Editar Marca");
+            $("#btnAgregarMarcaModal").html("Editar");
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    let marca = data.data;
+                    $("#brandId").val(marca.brandId);
+                    $("#nombreMarca").val(marca.name);
+                    $("#descripcionMarca").val(marca.description);
+                }
             });
         }
 
         function Delete(url) {
             swal({
-                title: "¿Estás seguro de que quieres eliminar esta marca?",
-                text: "No podrás recuperar la información de esta marca una vez eliminada",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true
-            }).then((borrar) => {
-                if (borrar) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: url,
-                        success: function (data) {
-                            if (data.success) {
-                                toastr.success(data.message);
-                                $("#tablaMarcas").DataTable().ajax.reload();
-                            }
-                            else {
-                                toastr.error(data.message);
-                            }
+                title: "¿Estás seguro de eliminar?",
+                text: "Se eliminará la marca",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Si, eliminar",
+                closeOnconfirm: true
+            }, function () {
+                $.ajax({
+                    type: 'DELETE',
+                    url: url,
+                    success: function (data) {
+                        if (data.success) {
+                            toastr.success(data.message);
+                            $('#tablaMarcas').DataTable().ajax.reload();
                         }
-                    });
-                }
+                        else {
+                            toastr.error(data.message);
+                        }
+                    }
+                });
             });
         }
 
-        function agregarMarca(url) {
-            var nombre = $("#nombreMarca").val();
-            var descripcion = $("#descripcionMarca").val();
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: JSON.stringify({ 'name': nombre, 'description': descripcion }),
-                contentType: "application/json",
-                success: function (data) {
-                    console.log(data);
-                    if (data.success) {
-                        toastr.success(data.message);
-                        $("#tablaMarcas").DataTable().ajax.reload();
+        function Active(url) {
+            swal({
+                title: "¿Estás seguro de activar?",
+                text: "Se activará la marca",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Si, activar",
+                closeOnconfirm: true
+            }, function () {
+                $.ajax({
+                    type: 'PATCH',
+                    url: url,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.success) {
+                            toastr.success(data.message);
+                            $('#tablaMarcas').DataTable().ajax.reload();
+                        }
+                        else {
+                            toastr.error(data.message);
+                        }
                     }
-                    else {
-                        toastr.error(data.message);
-                    }
-                }
+                });
             });
         }
     </script>

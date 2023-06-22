@@ -52,7 +52,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.CategoryModel", b =>
@@ -85,7 +85,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.CommentModel", b =>
@@ -123,7 +123,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.FeatureModel", b =>
@@ -156,7 +156,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("FeatureId");
 
-                    b.ToTable("Features");
+                    b.ToTable("Features", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ProductImageModel", b =>
@@ -188,7 +188,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ProductModel", b =>
@@ -238,7 +238,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.RatingModel", b =>
@@ -262,7 +262,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewImageModel", b =>
@@ -294,7 +294,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("ReviewImages");
+                    b.ToTable("ReviewImages", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewModel", b =>
@@ -351,7 +351,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.TagModel", b =>
@@ -366,7 +366,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("FeatureModelProductModel", b =>
@@ -381,7 +381,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("ProductsProductId");
 
-                    b.ToTable("FeatureModelProductModel");
+                    b.ToTable("FeatureModelProductModel", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -602,7 +602,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasIndex("TagsTagId");
 
-                    b.ToTable("ReviewModelTagModel");
+                    b.ToTable("ReviewModelTagModel", (string)null);
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ApplicationUser", b =>

@@ -18,6 +18,28 @@ namespace CamarasReviews.Repository
             _db = db;
         }
 
+        public void DisableBrand(Guid id)
+        {
+            var objFromDb = _db.Brands.FirstOrDefault(s => s.BrandId == id);
+            if (objFromDb != null)
+            {
+                objFromDb.IsActive = false;
+                objFromDb.DeletedDate = DateTime.Now;
+            }
+            _db.SaveChanges();
+        }
+
+        public void EnableBrand(Guid id)
+        {
+            var objFromDb = _db.Brands.FirstOrDefault(s => s.BrandId == id);
+            if (objFromDb != null)
+            {
+                objFromDb.IsActive = true;
+                objFromDb.DeletedDate = null;
+            }
+            _db.SaveChanges();
+        }
+
         public void Update(BrandModel brand)
         {
             var objFromDb = _db.Brands.FirstOrDefault(s => s.BrandId == brand.BrandId);
