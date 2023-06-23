@@ -35,7 +35,7 @@ public class ReviewModel
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
     [Required]
     public string AuthorId { get; set; }
     [ForeignKey("AuthorId")]

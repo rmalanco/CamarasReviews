@@ -1,0 +1,202 @@
+﻿@model CamarasReviews.Models.ViewModels.ProductViewModel
+@{
+    ViewData["Title"] = "Listado de Productos";
+}
+
+<!-- Encabezado de la página -->
+<h1 class="mt-4">@ViewData["Title"]</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+</ol>
+<!-- End Encabezado de la página -->
+<!-- Botones de la página para agregar y exportar -->
+<div class="row">
+    <div class="col-xl-12 col-md-12 mb-4">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto" id="btnAgregarProducto">
+                <i class="fas fa-plus"></i>
+                Agregar Producto
+            </button>
+        </div>
+    </div>
+</div>
+<!-- End Botones de la página para agregar y exportar -->
+<!-- Modal para agregar -->
+<!-- Modal -->
+<div class="modal fade" id="modalAgregarProducto" tabindex="-1" aria-labelledby="modalAgregarProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form id="fromUpsert" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="productId" name="productId" asp-for="Product.ProductId" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalAgregarProductoLabel">Agregar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label asp-for="Product.Name" class="form-label"></label>
+                            <input asp-for="Product.Name" class="form-control" id="nombreProducto" />
+                            <span asp-validation-for="Product.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label asp-for="Product.Description" class="form-label"></label>
+                            <textarea asp-for="Product.Description" class="form-control" id="descripcionProducto" rows="3"></textarea>
+                            <span asp-validation-for="Product.Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label asp-for="Feature.Name" class="form-label"></label>
+                            <input asp-for="Feature.Name" class="form-control" id="nombreCaracteristica" />
+                            <span asp-validation-for="Feature.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label asp-for="Product.SKU" class="form-label"></label>
+                                <input asp-for="Product.SKU" class="form-control" id="skuProducto" />
+                                <span asp-validation-for="Product.SKU" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label asp-for="Product.Price" class="form-label"></label>
+                                <input type="number" asp-for="Product.Price" class="form-control" id="precioProducto" value="0.00" />
+                                <span class="text-muted">Precio en USD</span>
+                                <span asp-validation-for="Product.Price" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label asp-for="Product.BrandId" class="form-label"></label>
+                                @Html.DropDownListFor(model => model.Product.BrandId, Model.ListaMarcas, "Seleccione una marca", new { @class = "form-control", @id = "marcaProducto" })
+                                <span asp-validation-for="Product.BrandId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label asp-for="Product.CategoryId" class="form-label"></label>
+                                @Html.DropDownListFor(model => model.Product.CategoryId, Model.ListaCategorias, "Seleccione una categoría", new { @class = "form-control", @id = "categoriaProducto" })
+                                <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label asp-for="Product.ProductImages" class="form-label"></label>
+                            <input type="file" asp-for="Product.ProductImages" class="form-control" id="imagenesProducto" multiple />
+                            <span asp-validation-for="Product.ProductImages" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row" id="previewImages">
+                            <label class="form-label">Vista previa de imágenes</label>
+                            <div class="col-3">
+                                @*<div class="card">
+                                    <img src="~/images/imagen1.jpg" class="card-img-top" alt="...">
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnAgregarProductoModal" class="btn btn-primary">Guardar</button>
+                    <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Modal para agregar -->
+<!-- End Botones de la página para agregar y exportar -->
+<!-- Contenido de la página -->
+<!-- Tabla de datos -->
+<div class="row">
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            @ViewData["Title"]
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered" id="tablaProducto" aria-describedby="dataTable_info" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Marca</th>
+                        <th>Categoría</th>
+                        <th>SKU</th>
+                        <th>Precio</th>
+                        <th>Fecha de creación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- End Tabla de datos -->
+<!-- End Contenido de la página -->
+<!-- Scripts de la página -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#tablaProducto").DataTable({
+                ajax: {
+                    url: "/Author/Products/GetAll"
+                },
+                columns: [
+                    { data: "name" },
+                    { data: "brand.name" },
+                    { data: "category.name" },
+                    { data: "sku" },
+                    { data: "price" },
+                    { data: "createdDate" },
+                    {
+                        data: "productId",
+                        render: function (data) {
+                            return `<div class="text-center">
+                                        <a href="/Author/Products/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:100px;">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        &nbsp;
+                                        <a onclick=Delete("/Author/Products/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </a>
+                                     </div>`;
+                        }
+                    }
+                ],
+                language: {
+                    decimal: "",
+                    emptyTable: "No hay información",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
+                    infoFiltered: "(Filtrado de _MAX_ total entradas)",
+                    infoPostFix: "",
+                    thousands: ",",
+                    lengthMenu: "Mostrar _MENU_ Entradas",
+                    loadingRecords: "Cargando...",
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    zeroRecords: "Sin resultados encontrados",
+                    paginate: {
+                        first: "Primero",
+                        last: "Ultimo",
+                        next: "Siguiente",
+                        previous: "Anterior",
+                    },
+                },
+            });
+        });
+    </script>
+}
+<!-- End Scripts -->

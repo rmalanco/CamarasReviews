@@ -10,9 +10,6 @@ public class BrandModel
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [Display(Name = "Nombre de la marca")]
     public string Name { get; set; }
-    [Required(ErrorMessage = "El campo {0} es requerido.")]
-    [Display(Name = "Descripción")]
-    public string Description { get; set; }
     [Display(Name = "Fecha de Creación")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime CreatedDate { get; set; } = DateTime.Now;

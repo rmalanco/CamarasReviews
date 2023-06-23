@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CamarasReviews.Data;
 using CamarasReviews.Models;
 using CamarasReviews.Repository.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CamarasReviews.Repository
 {
@@ -40,13 +41,39 @@ namespace CamarasReviews.Repository
             _db.SaveChanges();
         }
 
+        public IEnumerable<SelectListItem> GetAllActiveBrands()
+        {
+            return _db.Brands.Where(s => s.IsActive == true).Select(i => new SelectListItem()
+            {
+                Text = i.Name,
+                Value = i.BrandId.ToString()
+            });
+        }
+
+        public IEnumerable<SelectListItem> GetAllBrands()
+        {
+            return _db.Brands.Select(i => new SelectListItem()
+            {
+                Text = i.Name,
+                Value = i.BrandId.ToString()
+            });
+        }
+
+        public IEnumerable<SelectListItem> GetAllDisabledBrands()
+        {
+            return _db.Brands.Where(s => s.IsActive == false).Select(i => new SelectListItem()
+            {
+                Text = i.Name,
+                Value = i.BrandId.ToString()
+            });
+        }
+
         public void Update(BrandModel brand)
         {
             var objFromDb = _db.Brands.FirstOrDefault(s => s.BrandId == brand.BrandId);
             if (objFromDb != null)
             {
                 objFromDb.Name = brand.Name;
-                objFromDb.Description = brand.Description;
                 objFromDb.ModifiedDate = DateTime.Now;
             }
             _db.SaveChanges();

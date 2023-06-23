@@ -38,10 +38,6 @@
                         <label asp-for="Name" class="form-label"></label>
                         <input asp-for="Name" class="form-control" id="nombreMarca" />
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="Description" class="form-label"></label>
-                        <textarea asp-for="Description" class="form-control" id="descripcionMarca"></textarea>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btnAgregarMarcaModal" class="btn btn-primary">Guardar</button>
@@ -66,7 +62,6 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Descripción</th>
                         <th>Fecha de creación</th>
                         <th>Acciones</th>
                     </tr>
@@ -88,58 +83,58 @@
                 },
                 columns: [
                     { data: "name", width: "40%" },
-                    { data: "description", width: "35%" },
                     {
                         data: "createdDate",
                         render: function (data) {
                             return moment(data).format('DD/MM/YYYY HH:mm:ss');
-                        }, width: "15%" },
+                        }, width: "15%"
+                    },
                     {
                         data: "brandId",
                         render: function (data, type, row) {
-                            if(row.isActive == true){
+                            if (row.isActive == true) {
                                 return `
-                                    <div class="text-center">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarMarca" onclick="GetBrand('/Author/Brands/GetByID/${data}')">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger" onclick="Delete('/Author/Brands/Delete/${data}')">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                    `;
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarMarca" onclick="GetBrand('/Author/Brands/GetByID/${data}')">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-danger" onclick="Delete('/Author/Brands/Delete/${data}')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                            `;
                             }
-                            else{
+                            else {
                                 return `
-                                    <div class="text-center">                                        
-                                        <button type="button" class="btn btn-success" onclick="Active('/Author/Brands/Active/${data}')">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                    </div>
-                                    `;
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-success" onclick="Active('/Author/Brands/Active/${data}')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </div>
+                                            `;
                             }
                         }, width: "10%"
                     }
                 ],
                 language: {
-                  decimal: "",
-                  emptyTable: "No hay información",
-                  info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                  infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
-                  infoFiltered: "(Filtrado de _MAX_ total entradas)",
-                  infoPostFix: "",
-                  thousands: ",",
-                  lengthMenu: "Mostrar _MENU_ Entradas",
-                  loadingRecords: "Cargando...",
-                  processing: "Procesando...",
-                  search: "Buscar:",
-                  zeroRecords: "Sin resultados encontrados",
-                  paginate: {
-                    first: "Primero",
-                    last: "Ultimo",
-                    next: "Siguiente",
-                    previous: "Anterior",
-                  },
+                    decimal: "",
+                    emptyTable: "No hay información",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
+                    infoFiltered: "(Filtrado de _MAX_ total entradas)",
+                    infoPostFix: "",
+                    thousands: ",",
+                    lengthMenu: "Mostrar _MENU_ Entradas",
+                    loadingRecords: "Cargando...",
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    zeroRecords: "Sin resultados encontrados",
+                    paginate: {
+                        first: "Primero",
+                        last: "Ultimo",
+                        next: "Siguiente",
+                        previous: "Anterior",
+                    },
                 },
             });
         });
@@ -148,23 +143,20 @@
             event.preventDefault();
             let brandId = $("#brandId").val();
             let name = $("#nombreMarca").val();
-            let description = $("#descripcionMarca").val();            
             if (brandId == "" || brandId == null) {
                 let url = "/Author/Brands/Create";
-                let data = { name: name, description: description };
+                let data = { name: name };
                 $.ajax({
                     type: "POST",
                     url: url,
                     data: data,
                     success: function (data) {
                         if (data.success) {
-                            console.log(data);
                             $("#modalAgregarMarca").modal("hide");
                             $("#fromUpsert").trigger("reset");
                             $("#tablaMarcas").DataTable().ajax.reload();
                             toastr.success(data.message);
                         } else {
-                            console.log(data);
                             toastr.error(data.message);
                         }
                     }
@@ -172,20 +164,18 @@
             }
             else {
                 let url = "/Author/Brands/Update";
-                let data = { brandId: brandId, name: name, description: description };
+                let data = { brandId: brandId, name: name };
                 $.ajax({
                     type: "PUT",
                     url: url,
                     data: data,
                     success: function (data) {
                         if (data.success) {
-                            console.log(data);
                             $("#modalAgregarMarca").modal("hide");
                             $("#fromUpsert").trigger("reset");
                             $("#tablaMarcas").DataTable().ajax.reload();
                             toastr.success(data.message);
                         } else {
-                            console.log(data);
                             toastr.error(data.message);
                         }
                     }
@@ -213,7 +203,6 @@
                     let marca = data.data;
                     $("#brandId").val(marca.brandId);
                     $("#nombreMarca").val(marca.name);
-                    $("#descripcionMarca").val(marca.description);
                 }
             });
         }
@@ -272,3 +261,4 @@
         }
     </script>
 }
+<!-- End Scripts -->

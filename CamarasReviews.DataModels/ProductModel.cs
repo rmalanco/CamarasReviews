@@ -22,10 +22,12 @@ public class ProductModel
     [Display(Name = "Precio")]
     public double Price { get; set; }
     [Required]
+    [Display(Name = "Categoria")]
     public Guid CategoryId { get; set; }
     [ForeignKey("CategoryId")]
     public CategoryModel Category { get; set; }
     [Required]
+    [Display(Name = "Marca")]
     public Guid BrandId { get; set; }
     [ForeignKey("BrandId")]
     public BrandModel Brand { get; set; }
@@ -39,7 +41,7 @@ public class ProductModel
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
     [Display(Name = "Imágenes del Producto")]
     public ICollection<ProductImageModel> ProductImages { get; set; }
     public ICollection<ReviewModel> Reviews { get; set; }

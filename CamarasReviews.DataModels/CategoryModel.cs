@@ -10,10 +10,6 @@ public class CategoryModel // seria cambiar el nombre por CategoryModel
     [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
     [Display(Name = "Nombre")]
     public string Name { get; set; }
-    [Required(ErrorMessage = "El campo {0} es requerido.")]
-    [MaxLength(5000, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
-    [Display(Name = "Descripcion")]
-    public string Description { get; set; }
     [Display(Name = "Fecha de Creacion")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime CreatedDate { get; set; } = DateTime.Now;
@@ -24,6 +20,5 @@ public class CategoryModel // seria cambiar el nombre por CategoryModel
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
-    public bool IsActive { get; set; }
-    public  ICollection<ProductModel> Products { get; set; }
+    public bool IsActive { get; set; } = true;
 }

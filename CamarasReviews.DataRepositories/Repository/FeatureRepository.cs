@@ -24,7 +24,6 @@ namespace CamarasReviews.Repository
             if (objFromDb != null)
             {
                 objFromDb.Name = feature.Name;
-                objFromDb.Description = feature.Description;
             }
             _db.SaveChanges();
         }
