@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label asp-for="Feature.Name" class="form-label"></label>
-                            <input asp-for="Feature.Name" class="form-control" id="nombreCaracteristica" />
+                            <textarea asp-for="Feature.Name" class="form-control" id="caracteristicasProducto" rows="3"></textarea>
                             <span asp-validation-for="Feature.Name" class="text-danger"></span>
                         </div>
                     </div>
@@ -88,24 +88,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="mb-3">
-                            <label asp-for="Product.ProductImages" class="form-label"></label>
-                            <input type="file" asp-for="Product.ProductImages" class="form-control" id="imagenesProducto" multiple />
-                            <span asp-validation-for="Product.ProductImages" class="text-danger"></span>
+                    <div class="form-group row" id="multi-selector-uniq">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label asp-for="Product.ProductImages" class="form-label"></label>
+                                <input type="file" asp-for="Product.ProductImages" class="form-control" id="files" multiple />
+                                <span asp-validation-for="Product.ProductImages" class="text-danger"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row" id="previewImages">
-                            <label class="form-label">Vista previa de imágenes</label>
-                            <div class="col-3">
-                                @*<div class="card">
-                                    <img src="~/images/imagen1.jpg" class="card-img-top" alt="...">
-                                </div>*@
+                        <div class="col-12">
+                            <div class="mb-3 row" id="preview">
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btnAgregarProductoModal" class="btn btn-primary">Guardar</button>
@@ -148,7 +143,7 @@
 <!-- Scripts de la página -->
 @section Scripts {
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#tablaProducto").DataTable({
                 ajax: {
                     url: "/Author/Products/GetAll"
@@ -196,6 +191,156 @@
                     },
                 },
             });
+        });
+
+        let filesList = [];
+        const classDragOver = "drag-over";
+        const fileInputMulti = document.querySelector("#multi-selector-uniq #files");
+        const multiSelectorUniqPreview = document.querySelector("#multi-selector-uniq #preview");
+
+        function getIndexOfFileList(name, list) {
+            return list.reduce(
+                (position, file, index) => (file.name === name ? index : position),
+                -1
+            );
+        }
+
+        async function encodeFileToText(file) {
+            return file.text().then((text) => {
+                return text;
+            });
+        }
+
+        async function getUniqFiles(newFiles, currentListFiles) {
+            return new Promise((resolve) => {
+                Promise.all(newFiles.map((inputFile) => encodeFileToText(inputFile))).then(
+                    (inputFilesText) => {
+                        Promise.all(
+                            currentListFiles.map((savedFile) => encodeFileToText(savedFile))
+                        ).then((savedFilesText) => {
+                            let newFileList = currentListFiles;
+                            inputFilesText.forEach((inputFileText, index) => {
+                                if (!savedFilesText.includes(inputFileText)) {
+                                    newFileList = newFileList.concat(newFiles[index]);
+                                }
+                            });
+                            resolve(newFileList);
+                        });
+                    }
+                );
+            });
+        }
+
+       function renderPreviews(currentFileList, target, inputFile) {
+            target.innerHTML = ""; 
+            currentFileList.forEach((file, index) => {
+                const cardContainer = document.createElement("div");
+                cardContainer.classList.add("col-md-4", "mb-3", "d-flex", "align-items-stretch");
+
+                const card = document.createElement("div");
+                card.classList.add("card");
+
+                const cardBody = document.createElement("div");
+                cardBody.classList.add("card-body", "d-flex", "align-items-center", "justify-content-center");
+
+                const myImg = document.createElement("img");
+                myImg.src = URL.createObjectURL(file);
+                myImg.classList.add("card-img-top", "img-thumbnail", "w-100", "h-100");
+                myImg.draggable = true;
+                myImg.dataset.key = file.name;
+                myImg.addEventListener("drop", eventDrop);
+                myImg.addEventListener("dragover", eventDragOver);
+
+                const myButtonRemove = document.createElement("button");
+                myButtonRemove.textContent = "Eliminar";
+                myButtonRemove.classList.add("btn", "btn-danger", "mt-2");
+                myButtonRemove.addEventListener("click", () => {
+                    filesList = deleteArrayElementByIndex(currentFileList, index);
+                    inputFile.files = arrayFilesToFileList(filesList);
+                    renderPreviews(filesList, target, inputFile);
+                });
+
+                cardBody.appendChild(myImg);
+                card.appendChild(cardBody);
+                card.appendChild(myButtonRemove);
+                cardContainer.appendChild(card);
+                target.appendChild(cardContainer);
+            });
+        }
+
+        function deleteArrayElementByIndex(list, index) {
+            return list.filter((item, itemIndex) => itemIndex !== index);
+        }
+
+        function arrayFilesToFileList(filesList) {
+            return filesList.reduce(function (dataTransfer, file) {
+                dataTransfer.items.add(file);
+                return dataTransfer;
+            }, new DataTransfer()).files;
+        }
+
+        function arraySwapIndex(firstIndex, secondIndex, list) {
+            const tempList = list.slice();
+            const tmpFirstPos = tempList[firstIndex];
+            tempList[firstIndex] = tempList[secondIndex];
+            tempList[secondIndex] = tmpFirstPos;
+            return tempList;
+        }
+
+        fileInputMulti.addEventListener("input", async () => {
+            const newFilesList = Array.from(fileInputMulti.files);
+            filesList = await getUniqFiles(newFilesList, filesList);
+            renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti);
+            fileInputMulti.files = arrayFilesToFileList(filesList);
+        });
+
+        let myDragElement = undefined;
+        document.addEventListener("dragstart", (event) => {
+            myDragElement = event.target;
+        });
+
+        function eventDragOver(event) {
+            event.preventDefault();
+            multiSelectorUniqPreview
+                .querySelectorAll("li")
+                .forEach((item) => item.classList.remove(classDragOver));
+            event.target.classList.add(classDragOver);
+        }
+
+        function eventDrop(event) {
+            const myDropElement = event.target;
+            filesList = arraySwapIndex(
+                getIndexOfFileList(myDragElement.dataset.key, filesList),
+                getIndexOfFileList(myDropElement.dataset.key, filesList),
+                filesList
+            );
+            fileInputMulti.files = arrayFilesToFileList(filesList);
+            renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti);
+        }
+
+        $("#btnAgregarProducto").on("click", function () {
+            $("#fromUpsert")[0].reset(); // Reinicia el formulario
+            filesList = []; // Reinicia la lista de archivos seleccionados
+            renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti); // Limpia las vistas previas de archivos
+        });
+
+       $("#btnAgregarProductoModal").on("click", function (event) {
+            event.preventDefault();
+            let form = $("#fromUpsert");
+            let url = "/Author/Products/Create";
+            let data = new FormData(form[0]);
+            data.append("files", fileInputMulti.files);
+
+            console.log("DATOS DE FORMULARIO");
+            console.log(Object.fromEntries(data.entries()));
+
+            console.log("ARCHIVOS");
+            for (let i = 0; i < fileInputMulti.files.length; i++) {
+                console.log("Archivo " + (i + 1));
+                console.log("Nombre: " + fileInputMulti.files[i].name);
+                console.log("Tipo: " + fileInputMulti.files[i].type);
+                console.log("Tamaño: " + fileInputMulti.files[i].size + " bytes");
+            }
         });
     </script>
 }

@@ -23,7 +23,7 @@ namespace CamarasReviews.Areas.Author.Controllers
         // Vista principal
         public IActionResult Index()
         {
-            ProductViewModel productViewModel = new ProductViewModel()
+            ProductViewModel productViewModel = new()
             {
                 Product = new ProductModel(),
                 Feature = new FeatureModel(),
