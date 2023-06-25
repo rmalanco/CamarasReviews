@@ -14,5 +14,6 @@ namespace CamarasReviews.Repository.Interfaces
         IEnumerable<ProductModel> GetAllWithCategoryAndBrandByBrand(Guid brandId); // método para obtener todos los productos con sus categorías y marcas que pertenezcan a una marca
         ProductModel GetWithCategoryAndBrand(Guid id); // método para obtener un producto con su categoría y marca
         ProductModel GetWithCategoryAndBrandBySKU(string sku); // método para obtener un producto con su categoría y marca por su SKU
+        void Update(ProductModel product);
     }
 }

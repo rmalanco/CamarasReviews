@@ -1,26 +1,26 @@
 @model CamarasReviews.Models.CategoryModel
 @{
-    ViewData["Title"] = "Listado de Categorías";
+    ViewData["Title"] = "Listado de CategorÃ­as";
 }
 
-<!-- Encabezado de la página -->
+<!-- Encabezado de la pÃ¡gina -->
 <h1 class="mt-4">@ViewData["Title"]</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">@ViewData["Title"]</li>
 </ol>
-<!-- End Encabezado de la página -->
-<!-- Botones de la página para agregar y exportar -->
+<!-- End Encabezado de la pÃ¡gina -->
+<!-- Botones de la pÃ¡gina para agregar y exportar -->
 <div class="row">
     <div class="col-xl-12 col-md-12 mb-4">
         <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarCategoria" id="btnAgregarCategoria">
                 <i class="fas fa-plus"></i>
-                Agregar Categoría
+                Agregar CategorÃ­a
             </button>
         </div>
     </div>
 </div>
-<!-- End Botones de la página para agregar y exportar -->
+<!-- End Botones de la pÃ¡gina para agregar y exportar -->
 <!-- Modal para agregar -->
 <!-- Modal -->
 <div class="modal fade" id="modalAgregarCategoria" tabindex="-1" aria-labelledby="modalAgregarCategoriaLabel" aria-hidden="true">
@@ -30,7 +30,7 @@
                 <input type="hidden" id="categoryId" name="categoryId" asp-for="CategoryId" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalAgregarCategoriaLabel">Agregar Categoría</h5>
+                    <h5 class="modal-title" id="modalAgregarCategoriaLabel">Agregar CategorÃ­a</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
@@ -48,21 +48,21 @@
     </div>
 </div>
 <!-- End Modal para agregar -->
-<!-- End Botones de la página para agregar y exportar -->
-<!-- Contenido de la página -->
+<!-- End Botones de la pÃ¡gina para agregar y exportar -->
+<!-- Contenido de la pÃ¡gina -->
 <!-- Tabla de datos -->
 <div class="row">
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Listado de Categorías
+            Listado de CategorÃ­as
         </div>
         <div class="card-body">
             <table class="table table-striped table-bordered" id="tablaCategoria" aria-describedby="dataTable_info" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Fecha de creación</th>
+                        <th>Fecha de creaciÃ³n</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -72,8 +72,8 @@
     </div>
 </div>
 <!-- End Tabla de datos -->
-<!-- End Contenido de la página -->
-<!-- Scripts de la página -->
+<!-- End Contenido de la pÃ¡gina -->
+<!-- Scripts de la pÃ¡gina -->
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -118,7 +118,7 @@
                 ],
                 language: {
                     decimal: "",
-                    emptyTable: "No hay información",
+                    emptyTable: "No hay informaciÃ³n",
                     info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
                     infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
                     infoFiltered: "(Filtrado de _MAX_ total entradas)",
@@ -186,14 +186,14 @@
         $("#btnAgregarCategoria").click(function (event) {
             event.preventDefault();
             //cambiar el titulo del modal
-            $("#modalAgregarCategoriaLabel").html("Agregar Categoría");
+            $("#modalAgregarCategoriaLabel").html("Agregar CategorÃ­a");
             $("#fromUpsert").trigger("reset");
-            //cambiar el texto del botón
+            //cambiar el texto del botÃ³n
             $("#btnAgregarCategoriaModal").html("Guardar");
         });
 
         function GetCategory(url) {
-            $("#modalAgregarCategoriaLabel").html("Editar Categoría");
+            $("#modalAgregarCategoriaLabel").html("Editar CategorÃ­a");
             $("#btnAgregarCategoriaModal").html("Editar");
             $.ajax({
                 type: "GET",
@@ -207,55 +207,58 @@
         }
 
         function Delete(url) {
-            swal({
-                title: "¿Estás seguro de eliminar?",
-                text: "Se eliminará la categoría",
-                type: "warning",
+            Swal.fire({
+                title: "Â¿EstÃ¡s seguro de eliminar la CategorÃ­a?",
+                text: "No podrÃ¡s revertir esto!",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Si, eliminar",
-                closeOnconfirm: true
-            }, function () {
-                $.ajax({
-                    type: 'DELETE',
-                    url: url,
-                    success: function (data) {
-                        if (data.success) {
-                            toastr.success(data.message);
-                            $('#tablaCategoria').DataTable().ajax.reload();
+                confirmButtonText: "Si, eliminar!",
+                cancelButtonText: "No, cancelar!",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        success: function (data) {
+                            if (data.success) {
+                                $("#tablaCategoria").DataTable().ajax.reload();
+                                toastr.success(data.message);
+                            } else {
+                                toastr.error(data.message);
+                            }
                         }
-                        else {
-                            toastr.error(data.message);
-                        }
-                    }
-                });
+                    });
+                }
             });
         }
 
         function Active(url) {
-            swal({
-                title: "¿Estás seguro de activar?",
-                text: "Se activará la categoría",
-                type: "warning",
+            Swal.fire({
+                title: "Â¿EstÃ¡s seguro de activar la CategorÃ­a?",
+                text: "No podrÃ¡s revertir esto!",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Si, activar",
-                closeOnconfirm: true
-            }, function () {
-                $.ajax({
-                    type: 'PATCH',
-                    url: url,
-                    success: function (data) {
-                        console.log(data);
-                        if (data.success) {
-                            toastr.success(data.message);
-                            $('#tablaCategoria').DataTable().ajax.reload();
+                confirmButtonText: "Si, activar!",
+                cancelButtonText: "No, cancelar!",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "PATCH",
+                        url: url,
+                        success: function (data) {
+                            if (data.success) {
+                                $("#tablaCategoria").DataTable().ajax.reload();
+                                toastr.success(data.message);
+                            } else {
+                                toastr.error(data.message);
+                            }
                         }
-                        else {
-                            toastr.error(data.message);
-                        }
-                    }
-                });
+                    });
+                }
             });
         }
     </script>

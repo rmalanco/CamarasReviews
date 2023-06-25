@@ -137,5 +137,17 @@ namespace CamarasReviews.Repository
                 }).FirstOrDefault();
             return product;
         }
+
+        public void Update(ProductModel product)
+        {
+            var objFromDb = _db.Products.FirstOrDefault(s => s.ProductId == product.ProductId);
+            objFromDb.Name = product.Name;
+            objFromDb.SKU = product.SKU;
+            objFromDb.Description = product.Description;
+            objFromDb.Price = product.Price;
+            objFromDb.CategoryId = product.CategoryId;
+            objFromDb.BrandId = product.BrandId;
+            _db.SaveChanges();
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace CamarasReviews.Repository
             var objFromDb = _db.Features.FirstOrDefault(s => s.FeatureId == feature.FeatureId);
             if (objFromDb != null)
             {
-                objFromDb.Name = feature.Name;
+                objFromDb.Description = feature.Description;
             }
             _db.SaveChanges();
         }

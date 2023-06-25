@@ -23,14 +23,9 @@ namespace CamarasReviews.Areas.Author.Controllers
         // Vista principal
         public IActionResult Index()
         {
-            ProductViewModel productViewModel = new()
-            {
-                Product = new ProductModel(),
-                Feature = new FeatureModel(),
-                ListaCategorias = _unitOfWork.Category.GetAllActiveCategories(),
-                ListaMarcas = _unitOfWork.Brand.GetAllActiveBrands()
-            };
-            return View(productViewModel);
+            ViewBag.Categories = _unitOfWork.Category.GetAllActiveCategories();
+            ViewBag.Brands = _unitOfWork.Brand.GetAllActiveBrands();
+            return View();
         }
         #endregion
 
@@ -40,27 +35,47 @@ namespace CamarasReviews.Areas.Author.Controllers
         #endregion
 
         #region Métodos de la API
-        private IActionResult CreateAndUpdateBrand(BrandModel brand)
+        private IActionResult CreateAndUpdateBrand(ProductModel product)
         {
             if (ModelState.IsValid)
             {
-                if (brand.BrandId == Guid.Empty)
-                {
-                    brand.BrandId = Guid.NewGuid();
-                    _unitOfWork.Brand.Add(brand);
-                }
-                else
-                {
-                    _unitOfWork.Brand.Update(brand);
-                }
-                _unitOfWork.Save();
-                return Json(new { success = true, message = "Marca guardada correctamente" });
+                //     if (product.ProductId == Guid.Empty)
+                //     {
+                //         product.ProductId = Guid.NewGuid();
+                //         _unitOfWork.Product.Add(product);
+                //     }
+                //     else
+                //     {
+                //         _unitOfWork.Product.Update(product);
+                //     }
+                //     _unitOfWork.Save();
+                return Json(new { success = true, message = "El producto se ha guardado correctamente" });
             }
             else
             {
                 var error = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Json(new { success = false, message = error });
             }
+
+            // if (ModelState.IsValid)
+            // {
+            //     if (product.ProductId == Guid.Empty)
+            //     {
+            //         // product.ProductId = Guid.NewGuid();
+            //         // _unitOfWork.Product.Add(product);
+            //     }
+            //     else
+            //     {
+            //         // _unitOfWork.Product.Update(product);
+            //     }
+            //     // _unitOfWork.Save();
+            //     return Json(new { success = true, message = "El producto se ha guardado correctamente" });
+            // }
+            // else
+            // {
+            //     var error = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            //     return Json(new { success = false, message = error });
+            // }
         }
         // Mostrar todas las marcas
         [HttpGet]
@@ -71,15 +86,15 @@ namespace CamarasReviews.Areas.Author.Controllers
         }
         // Crear o editar una marca debe de se de tipo post y por api json
         [HttpPost]
-        public IActionResult Create(BrandModel brand)
+        public IActionResult Create(ProductModel product)
         {
-            return CreateAndUpdateBrand(brand);
+            return CreateAndUpdateBrand(product);
         }
         // PUT - Editar una marca, override del método Upsert
         [HttpPut]
-        public IActionResult Update(BrandModel brand)
+        public IActionResult Update(ProductModel product)
         {
-            return CreateAndUpdateBrand(brand);
+            return CreateAndUpdateBrand(product);
         }
         // Mostrar una marca
         [HttpGet]

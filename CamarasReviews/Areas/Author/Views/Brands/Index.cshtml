@@ -208,55 +208,58 @@
         }
 
         function Delete(url) {
-            swal({
-                title: "¿Estás seguro de eliminar?",
-                text: "Se eliminará la marca",
-                type: "warning",
+            Swal.fire({
+                title: "¿Estás seguro de eliminar la marca?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Si, eliminar",
-                closeOnconfirm: true
-            }, function () {
-                $.ajax({
-                    type: 'DELETE',
-                    url: url,
-                    success: function (data) {
-                        if (data.success) {
-                            toastr.success(data.message);
-                            $('#tablaMarcas').DataTable().ajax.reload();
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "¡Sí, eliminar!",
+                cancelButtonText: "Cancelar",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        success: function (data) {
+                            if (data.success) {
+                                $("#tablaMarcas").DataTable().ajax.reload();
+                                toastr.success(data.message);
+                            } else {
+                                toastr.error(data.message);
+                            }
                         }
-                        else {
-                            toastr.error(data.message);
-                        }
-                    }
-                });
+                    });
+                }
             });
         }
 
         function Active(url) {
-            swal({
-                title: "¿Estás seguro de activar?",
-                text: "Se activará la marca",
-                type: "warning",
+            Swal.fire({
+                title: "¿Estás seguro de activar la marca?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Si, activar",
-                closeOnconfirm: true
-            }, function () {
-                $.ajax({
-                    type: 'PATCH',
-                    url: url,
-                    success: function (data) {
-                        console.log(data);
-                        if (data.success) {
-                            toastr.success(data.message);
-                            $('#tablaMarcas').DataTable().ajax.reload();
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "¡Sí, activar!",
+                cancelButtonText: "Cancelar",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "PATCH",
+                        url: url,
+                        success: function (data) {
+                            if (data.success) {
+                                $("#tablaMarcas").DataTable().ajax.reload();
+                                toastr.success(data.message);
+                            } else {
+                                toastr.error(data.message);
+                            }
                         }
-                        else {
-                            toastr.error(data.message);
-                        }
-                    }
-                });
+                    });
+                }
             });
         }
     </script>

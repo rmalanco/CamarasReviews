@@ -4,6 +4,7 @@ using CamarasReviews.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CamarasReviews.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230624075147_UpdateFeacture0")]
+    partial class UpdateFeacture0
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,13 +141,12 @@ namespace CamarasReviews.Data.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("ProductModelProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FeatureId");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductModelProductId");
 
                     b.ToTable("Features");
                 });
@@ -176,8 +178,7 @@ namespace CamarasReviews.Data.Migrations
 
                     b.HasKey("ProductImageId");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
                 });
@@ -631,20 +632,16 @@ namespace CamarasReviews.Data.Migrations
 
             modelBuilder.Entity("CamarasReviews.Models.FeatureModel", b =>
                 {
-                    b.HasOne("CamarasReviews.Models.ProductModel", "Product")
-                        .WithOne("Feature")
-                        .HasForeignKey("CamarasReviews.Models.FeatureModel", "ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
+                    b.HasOne("CamarasReviews.Models.ProductModel", null)
+                        .WithMany("Features")
+                        .HasForeignKey("ProductModelProductId");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ProductImageModel", b =>
                 {
                     b.HasOne("CamarasReviews.Models.ProductModel", "Product")
-                        .WithOne("ProductImage")
-                        .HasForeignKey("CamarasReviews.Models.ProductImageModel", "ProductId")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -707,7 +704,7 @@ namespace CamarasReviews.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("CamarasReviews.Models.ProductModel", "Product")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -785,11 +782,11 @@ namespace CamarasReviews.Data.Migrations
 
             modelBuilder.Entity("CamarasReviews.Models.ProductModel", b =>
                 {
-                    b.Navigation("Feature")
-                        .IsRequired();
+                    b.Navigation("Features");
 
-                    b.Navigation("ProductImage")
-                        .IsRequired();
+                    b.Navigation("ProductImages");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("CamarasReviews.Models.ReviewModel", b =>
