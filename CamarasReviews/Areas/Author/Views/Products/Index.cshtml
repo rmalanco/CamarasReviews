@@ -37,36 +37,36 @@
                     <div class="form-group">
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label"></label>
-                            <input asp-for="Name" class="form-control" id="productName" />
+                            <input asp-for="Name" class="form-control" id="nombreProducto" />
                             <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label"></label>
-                            <textarea asp-for="Description" class="form-control" id="productDescription" rows="3"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                     </div>
                     @* <div class="form-group">
                         <div class="mb-3">
+                            <label asp-for="Description" class="form-label"></label>
+                            <textarea asp-for="Description" class="form-control" id="descripcionProducto" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div> *@
+                    @* <div class="form-group">
+                        <div class="mb-3">
                             <label asp-for="Feature.Description" class="form-label"></label>
-                            <textarea asp-for="Feature.Description" class="form-control" id="productFeatureDescription" rows="3"></textarea>
+                            <textarea asp-for="Feature.Description" class="form-control" id="caracteristicasProducto" rows="3"></textarea>
                             <span asp-validation-for="Feature.Description" class="text-danger"></span>
                         </div>
                     </div> *@
-                    <div class="form-group row">
+                    @* <div class="form-group row">
                         <div class="col-6">
                             <div class="mb-3">
                                 <label asp-for="SKU" class="form-label"></label>
-                                <input asp-for="SKU" class="form-control" id="productSKU" />
+                                <input asp-for="SKU" class="form-control" id="skuProducto" />
                                 <span asp-validation-for="SKU" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="mb-3">
                                 <label asp-for="Price" class="form-label"></label>
-                                <input type="number" asp-for="Price" class="form-control" id="productPrice" value="0" />
+                                <input type="number" asp-for="Price" class="form-control" id="precioProducto" value="0.00" />
                                 <span class="text-muted">Precio en USD</span>
                                 <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
@@ -76,7 +76,7 @@
                         <div class="col-6">
                             <div class="mb-3">
                                 <label asp-for="BrandId" class="form-label"></label>
-                                <select asp-for="BrandId" class="form-select" id="productBrand">
+                                <select asp-for="BrandId" class="form-select" id="marcaProducto">
                                     <option value="">Seleccione una marca</option>
                                     @foreach (var brand in ViewBag.Brands)
                                     {
@@ -88,7 +88,7 @@
                         <div class="col-6">
                             <div class="mb-3">
                                 <label asp-for="CategoryId" class="form-label"></label>
-                                <select asp-for="CategoryId" class="form-select" id="productCategory">
+                                <select asp-for="CategoryId" class="form-select" id="categoriaProducto">
                                     <option value="">Seleccione una categoría</option>
                                     @foreach (var category in ViewBag.Categories)
                                     {
@@ -97,7 +97,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
                     @* <div class="form-group row" id="multi-selector-uniq">
                         <div class="col-12">
                             <div class="mb-3">
@@ -154,30 +154,30 @@
 @section Scripts {
     <script>
         $("#tablaProducto").DataTable({
-                ajax: {
-                    url: "/Author/Products/GetAll"
-                },
+            ajax: {
+                url: "/Author/Products/GetAll"
+            },
                 columns: [
-                    { data: "name" },
-                    { data: "brand.name" },
-                    { data: "category.name" },
-                    { data: "sku" },
-                    { data: "price" },
-                    { data: "createdDate" },
-                    {
-                        data: "productId",
-                        render: function (data) {
-                            return `<div class="text-center">
-                                        <a href="/Author/Products/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:100px;">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </a>
-                                        &nbsp;
-                                        <a onclick=Delete("/Author/Products/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </a>
-                                     </div>`;
-                        }
+                { data: "name" },
+                { data: "brand.name" },
+                { data: "category.name" },
+                { data: "sku" },
+                { data: "price" },
+                { data: "createdDate" },
+                {
+                    data: "productId",
+                    render: function (data) {
+                        return `<div class="text-center">
+                                    <a href="/Author/Products/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:100px;">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    &nbsp;
+                                    <a onclick=Delete("/Author/Products/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                    </a>
+                                 </div>`;
                     }
+                }
                 ],
                 language: {
                     decimal: "",
@@ -332,69 +332,65 @@
         });
 
        $("#btnAgregarProductoModal").on("click", function (event) {
-        event.preventDefault();
-        let productId = $("#productId").val();
-        let productName = $("#productName").val();
-        let productDescription = $("#productDescription").val();
-        let productSKU = $("#productSKU").val();
-        let productPrice = $("#productPrice").val();
-        let productBrandId = $("#productBrandId").val();
-        let productBrandName = $("#productBrandId option:selected").text();
-        let productCategoryId = $("#productCategoryId").val();
-        let productCategoryName = $("#productCategoryId option:selected").text();
-        if (productId == "" || productId == null) {
+            event.preventDefault();
+            let productId = $("#productId").val();
+            let productName = $("#nombreProducto").val();
+            let productDescription = $("#descripcionProducto").val();
+            let productSKU = $("#skuProducto").val();
+            let productPrice = $("#precioProducto").val();
+            let brandId = $("#marcaProducto").val();
+            let brandName = $("#marcaProducto option:selected").text();
+            let categoryId = $("#categoriaProducto").val();
+            let categoryName = $("#categoriaProducto option:selected").text();
+            //let features = $("#caracteristicasProducto").val();
+            //let files = $("#files").fileInputMulti;
+            let data = new FormData();
+            data.append("ProductId", productId);
+            data.append("Name", productName);
+            //data.append("Description", productDescription);
+            //data.append("SKU", productSKU);
+            //data.append("Price", productPrice);
+            //data.append("BrandId", brandId);
+            //data.append("Brand.BrandId", brandId);
+            //data.append("Brand.Name", brandName);
+            //data.append("CategoryId", categoryId);
+            //data.append("Category.CategoryId", categoryId);
+            //data.append("Category.Name", categoryName);
+            //data.append("Features", features);
+            //data.append("Files", files);
+            if (productId == "" || productId == null) {
                 let url = "/Author/Products/Create";
-                let data = {
-                    name: productName,
-                    description: productDescription,
-                    sku: productSKU,
-                    price: productPrice,
-                    brandId: productBrandId,
-                    brand.name: productBrandName,
-                    categoryId: productCategoryId,
-                    category.name: productCategoryName
-                };
                 $.ajax({
                     type: "POST",
                     url: url,
                     data: data,
-                    success: function (data) {
-                        if (data.success) {
-                            $("#modalAgregarProducto").modal("hide");
-                            $("#fromUpsert").trigger("reset");
-                            $("#tablaProducto").DataTable().ajax.reload();
-                            toastr.success(data.message);
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $("#modalProducto").modal("hide");
+                            dataTable.ajax.reload();
+                            toastr.success(response.message);
                         } else {
-                            toastr.error(data.message);
+                            toastr.error(response.message);
                         }
                     }
                 });
-            }
-            else {
+            } else {
                 let url = "/Author/Products/Update";
-                let data = {
-                    id: productId,
-                    name: productName,
-                    description: productDescription,
-                    sku: productSKU,
-                    price: productPrice,
-                    brandId: productBrandId,
-                    brand.name: productBrandName,
-                    categoryId: productCategoryId,
-                    category.name: productCategoryName
-                };
                 $.ajax({
                     type: "POST",
                     url: url,
                     data: data,
-                    success: function (data) {
-                        if (data.success) {
-                            $("#modalAgregarProducto").modal("hide");
-                            $("#fromUpsert").trigger("reset");
-                            $("#tablaProducto").DataTable().ajax.reload();
-                            toastr.success(data.message);
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $("#modalProducto").modal("hide");
+                            dataTable.ajax.reload();
+                            toastr.success(response.message);
                         } else {
-                            toastr.error(data.message);
+                            toastr.error(response.message);
                         }
                     }
                 });
