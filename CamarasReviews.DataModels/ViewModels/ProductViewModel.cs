@@ -10,9 +10,11 @@ namespace CamarasReviews.Models.ViewModels
 {
     public class ProductViewModel
     {
-        public FeatureModel Feature { get; set; }
-        public ProductImageModel ProductImage { get; set; }
-        public IEnumerable<SelectListItem> ListaMarcas { get; set; }
-        public IEnumerable<SelectListItem> ListaCategorias { get; set; }
+        public string ProductId { get; set; }
+        public ProductModel Product { get; set; }
+        public IEnumerable<SelectListItem> CategoryList { get; set; }
+        public IEnumerable<SelectListItem> BrandList { get; set; }
+        [Display(Name = "Descripción de características")]
+        public string FeatureDescription { get; set; }
     }
 }

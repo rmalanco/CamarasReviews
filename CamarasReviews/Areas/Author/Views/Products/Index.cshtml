@@ -41,21 +41,20 @@
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
-                    @* <div class="form-group">
+                    <div class="form-group">
                         <div class="mb-3">
                             <label asp-for="Description" class="form-label"></label>
                             <textarea asp-for="Description" class="form-control" id="descripcionProducto" rows="3"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
-                    </div> *@
-                    @* <div class="form-group">
+                    </div>
+                    <div class="form-group">
                         <div class="mb-3">
-                            <label asp-for="Feature.Description" class="form-label"></label>
-                            <textarea asp-for="Feature.Description" class="form-control" id="caracteristicasProducto" rows="3"></textarea>
-                            <span asp-validation-for="Feature.Description" class="text-danger"></span>
+                            <label for="featureName" class="form-label">Características</label>
+                            <textarea class="form-control" id="featureName" rows="3"></textarea>
                         </div>
-                    </div> *@
-                    @* <div class="form-group row">
+                    </div>
+                    <div class="form-group row">
                         <div class="col-6">
                             <div class="mb-3">
                                 <label asp-for="SKU" class="form-label"></label>
@@ -73,6 +72,20 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        @*<div class="col-6">
+                        <div class="mb-3">
+                        <label asp-for="Product.BrandId" class="form-label"></label>
+                        @Html.DropDownListFor(model => model.Product.BrandId, Model.BrandList, "Seleccione una marca", new { @class = "form-control", @id = "marcaProducto" })
+                        <span asp-validation-for="Product.BrandId" class="text-danger"></span>
+                        </div>
+                        </div>
+                        <div class="col-6">
+                        <div class="mb-3">
+                        <label asp-for="Product.CategoryId" class="form-label"></label>
+                        @Html.DropDownListFor(model => model.Product.CategoryId, Model.CategoryList, "Seleccione una categoría", new { @class = "form-control", @id = "categoriaProducto" })
+                        <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                        </div>
+                        </div>*@
                         <div class="col-6">
                             <div class="mb-3">
                                 <label asp-for="BrandId" class="form-label"></label>
@@ -97,19 +110,19 @@
                                 </select>
                             </div>
                         </div>
-                    </div> *@
+                    </div>
                     @* <div class="form-group row" id="multi-selector-uniq">
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label asp-for="ProductImage.UrlImagen" class="form-label"></label>
-                                <input type="file" asp-for="ProductImage.UrlImagen" class="form-control" id="files" multiple />
-                                <span asp-validation-for="ProductImage.UrlImagen" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="mb-3 row" id="preview">
-                            </div>
-                        </div>
+                    <div class="col-12">
+                    <div class="mb-3">
+                    <label asp-for="ProductImage.UrlImagen" class="form-label"></label>
+                    <input type="file" asp-for="ProductImage.UrlImagen" class="form-control" id="files" multiple />
+                    <span asp-validation-for="ProductImage.UrlImagen" class="text-danger"></span>
+                    </div>
+                    </div>
+                    <div class="col-12">
+                    <div class="mb-3 row" id="preview">
+                    </div>
+                    </div>
                     </div> *@
                 </div>
                 <div class="modal-footer">
@@ -157,7 +170,7 @@
             ajax: {
                 url: "/Author/Products/GetAll"
             },
-                columns: [
+            columns: [
                 { data: "name" },
                 { data: "brand.name" },
                 { data: "category.name" },
@@ -168,56 +181,56 @@
                     data: "productId",
                     render: function (data) {
                         return `<div class="text-center">
-                                    <a href="/Author/Products/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:100px;">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    &nbsp;
-                                    <a onclick=Delete("/Author/Products/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </a>
-                                 </div>`;
+                                          <a href="/Author/Products/Edit/${data}" class="btn btn-success text-white" style="cursor:pointer; width:100px;">
+                                             <i class="fas fa-edit"></i> Editar
+                                          </a>
+                                          &nbsp;
+                                          <a onclick=Delete("/Author/Products/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer; width:100px;">
+                                             <i class="fas fa-trash-alt"></i> Eliminar
+                                          </a>
+                                        </div>`;
                     }
                 }
-                ],
-                language: {
-                    decimal: "",
-                    emptyTable: "No hay información",
-                    info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                    infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
-                    infoFiltered: "(Filtrado de _MAX_ total entradas)",
-                    infoPostFix: "",
-                    thousands: ",",
-                    lengthMenu: "Mostrar _MENU_ Entradas",
-                    loadingRecords: "Cargando...",
-                    processing: "Procesando...",
-                    search: "Buscar:",
-                    zeroRecords: "Sin resultados encontrados",
-                    paginate: {
-                        first: "Primero",
-                        last: "Ultimo",
-                        next: "Siguiente",
-                        previous: "Anterior",
-                    },
+            ],
+            language: {
+                decimal: "",
+                emptyTable: "No hay información",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
+                infoFiltered: "(Filtrado de _MAX_ total entradas)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Mostrar _MENU_ Entradas",
+                loadingRecords: "Cargando...",
+                processing: "Procesando...",
+                search: "Buscar:",
+                zeroRecords: "Sin resultados encontrados",
+                paginate: {
+                    first: "Primero",
+                    last: "Ultimo",
+                    next: "Siguiente",
+                    previous: "Anterior",
                 },
-            });
+            },
+        });
         //let filesList = [];
         //const classDragOver = "drag-over";
         //const fileInputMulti = document.querySelector("#multi-selector-uniq #files");
         //const multiSelectorUniqPreview = document.querySelector("#multi-selector-uniq #preview");
-//
+        //
         //function getIndexOfFileList(name, list) {
         //    return list.reduce(
         //        (position, file, index) => (file.name === name ? index : position),
         //        -1
         //    );
         //}
-//
+        //
         //async function encodeFileToText(file) {
         //    return file.text().then((text) => {
         //        return text;
         //    });
         //}
-//
+        //
         //async function getUniqFiles(newFiles, currentListFiles) {
         //    return new Promise((resolve) => {
         //        Promise.all(newFiles.map((inputFile) => encodeFileToText(inputFile))).then(
@@ -237,19 +250,19 @@
         //        );
         //    });
         //}
-//
+        //
         //unction renderPreviews(currentFileList, target, inputFile) {
         //    target.innerHTML = "";
         //    currentFileList.forEach((file, index) => {
         //        const cardContainer = document.createElement("div");
         //        cardContainer.classList.add("col-md-4", "mb-3", "d-flex", "align-items-stretch");
-//
+        //
         //        const card = document.createElement("div");
         //        card.classList.add("card");
-//
+        //
         //        const cardBody = document.createElement("div");
         //        cardBody.classList.add("card-body", "d-flex", "align-items-center", "justify-content-center");
-//
+        //
         //        const myImg = document.createElement("img");
         //        myImg.src = URL.createObjectURL(file);
         //        myImg.classList.add("card-img-top", "img-thumbnail", "w-100", "h-100");
@@ -257,7 +270,7 @@
         //        myImg.dataset.key = file.name;
         //        myImg.addEventListener("drop", eventDrop);
         //        myImg.addEventListener("dragover", eventDragOver);
-//
+        //
         //        const myButtonRemove = document.createElement("button");
         //        myButtonRemove.textContent = "Eliminar";
         //        myButtonRemove.classList.add("btn", "btn-danger", "mt-2");
@@ -266,7 +279,7 @@
         //            inputFile.files = arrayFilesToFileList(filesList);
         //            renderPreviews(filesList, target, inputFile);
         //        });
-//
+        //
         //        cardBody.appendChild(myImg);
         //        card.appendChild(cardBody);
         //        card.appendChild(myButtonRemove);
@@ -274,18 +287,18 @@
         //        target.appendChild(cardContainer);
         //    });
         //}
-//
+        //
         //function deleteArrayElementByIndex(list, index) {
         //    return list.filter((item, itemIndex) => itemIndex !== index);
         //}
-//
+        //
         //function arrayFilesToFileList(filesList) {
         //    return filesList.reduce(function (dataTransfer, file) {
         //        dataTransfer.items.add(file);
         //        return dataTransfer;
         //    }, new DataTransfer()).files;
         //}
-//
+        //
         //function arraySwapIndex(firstIndex, secondIndex, list) {
         //    const tempList = list.slice();
         //    const tmpFirstPos = tempList[firstIndex];
@@ -293,19 +306,19 @@
         //    tempList[secondIndex] = tmpFirstPos;
         //    return tempList;
         //}
-//
+        //
         //fileInputMulti.addEventListener("input", async () => {
         //    const newFilesList = Array.from(fileInputMulti.files);
         //    filesList = await getUniqFiles(newFilesList, filesList);
         //    renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti);
         //    fileInputMulti.files = arrayFilesToFileList(filesList);
         //});
-//
+        //
         //let myDragElement = undefined;
         //document.addEventListener("dragstart", (event) => {
         //    myDragElement = event.target;
         //});
-//
+        //
         //function eventDragOver(event) {
         //    event.preventDefault();
         //    multiSelectorUniqPreview
@@ -313,7 +326,7 @@
         //        .forEach((item) => item.classList.remove(classDragOver));
         //    event.target.classList.add(classDragOver);
         //}
-//
+        //
         //function eventDrop(event) {
         //    const myDropElement = event.target;
         //    filesList = arraySwapIndex(
@@ -324,41 +337,35 @@
         //    fileInputMulti.files = arrayFilesToFileList(filesList);
         //    renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti);
         //}
-//
+        //
         $("#btnAgregarProducto").on("click", function () {
             $("#fromUpsert")[0].reset(); // Reinicia el formulario
             //filesList = []; // Reinicia la lista de archivos seleccionados
             //renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti); // Limpia las vistas previas de archivos
         });
 
-       $("#btnAgregarProductoModal").on("click", function (event) {
+        $("#btnAgregarProductoModal").on("click", function (event) {
             event.preventDefault();
-            let productId = $("#productId").val();
             let productName = $("#nombreProducto").val();
             let productDescription = $("#descripcionProducto").val();
-            let productSKU = $("#skuProducto").val();
             let productPrice = $("#precioProducto").val();
-            let brandId = $("#marcaProducto").val();
-            let brandName = $("#marcaProducto option:selected").text();
-            let categoryId = $("#categoriaProducto").val();
-            let categoryName = $("#categoriaProducto option:selected").text();
-            //let features = $("#caracteristicasProducto").val();
-            //let files = $("#files").fileInputMulti;
+            let productSKU = $("#skuProducto").val();
+            let productBrandId = $("#marcaProducto").val();
+            let productBrandName = $("#marcaProducto option:selected").text();
+            let productCategoryId = $("#categoriaProducto").val();
+            let productCategoryName = $("#categoriaProducto option:selected").text();
+            let productFeature = $("#featureName").val();
             let data = new FormData();
-            data.append("ProductId", productId);
             data.append("Name", productName);
-            //data.append("Description", productDescription);
-            //data.append("SKU", productSKU);
-            //data.append("Price", productPrice);
-            //data.append("BrandId", brandId);
-            //data.append("Brand.BrandId", brandId);
-            //data.append("Brand.Name", brandName);
-            //data.append("CategoryId", categoryId);
-            //data.append("Category.CategoryId", categoryId);
-            //data.append("Category.Name", categoryName);
-            //data.append("Features", features);
-            //data.append("Files", files);
-            if (productId == "" || productId == null) {
+            data.append("Description", productDescription);
+            data.append("Price", productPrice);
+            data.append("SKU", productSKU);
+            data.append("BrandId", productBrandId);
+            data.append("Brand.Name", productBrandName);
+            data.append("CategoryId", productCategoryId);
+            data.append("Category.Name", productCategoryName);
+            data.append("Feature.Description", productFeature);
+            if ($("#productId").val() == "" || $("#productId").val() == null) {
                 let url = "/Author/Products/Create";
                 $.ajax({
                     type: "POST",
@@ -368,8 +375,8 @@
                     processData: false,
                     success: function (response) {
                         if (response.success) {
-                            $("#modalProducto").modal("hide");
-                            dataTable.ajax.reload();
+                            $("#modalAgregarProducto").modal("hide");
+                            $("#tablaProducto").DataTable().ajax.reload();
                             toastr.success(response.message);
                         } else {
                             toastr.error(response.message);
@@ -377,7 +384,7 @@
                     }
                 });
             } else {
-                let url = "/Author/Products/Update";
+                let url = "/Author/Products/Create";
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -386,8 +393,8 @@
                     processData: false,
                     success: function (response) {
                         if (response.success) {
-                            $("#modalProducto").modal("hide");
-                            dataTable.ajax.reload();
+                            $("#modalAgregarProducto").modal("hide");
+                            $("#tablaProducto").DataTable().ajax.reload();
                             toastr.success(response.message);
                         } else {
                             toastr.error(response.message);

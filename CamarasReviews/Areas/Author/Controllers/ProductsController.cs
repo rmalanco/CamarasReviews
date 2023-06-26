@@ -26,6 +26,13 @@ namespace CamarasReviews.Areas.Author.Controllers
             ViewBag.Categories = _unitOfWork.Category.GetAllActiveCategories();
             ViewBag.Brands = _unitOfWork.Brand.GetAllActiveBrands();
             return View();
+            //ProductViewModel productViewModel = new()
+            //{
+            //    Product = new ProductModel(),
+            //    CategoryList = _unitOfWork.Category.GetAllActiveCategories(),
+            //    BrandList = _unitOfWork.Brand.GetAllActiveBrands()
+            //};
+            //return View(productViewModel);
         }
         #endregion
 
@@ -35,53 +42,64 @@ namespace CamarasReviews.Areas.Author.Controllers
         #endregion
 
         #region Métodos de la API
-        private IActionResult CreateAndUpdateProduct(ProductModel product)
+        private IActionResult CreateAndUpdateProduct(ProductModel product, FeatureViewModel feature)
         {
-            if (product.ProductId == Guid.Empty)
+            if (ModelState.IsValid)
             {
-                product.ProductId = Guid.NewGuid();
-                if (ModelState.IsValid)
+                if (product.ProductId == Guid.Empty)
                 {
-                    return Json(new { success = true, message = "El producto se ha guardado correctamente" });
+                    product.ProductId = Guid.NewGuid();
+                    product.CreatedDate = DateTime.Now;
+                    product.IsActive = true;
+
+                    var featureModel = new FeatureModel
+                    {
+                        FeatureId = Guid.NewGuid(),
+                        ProductId = product.ProductId,
+                        Description = feature.Description,
+                        CreatedDate = DateTime.Now,
+                        IsActive = true
+                    };
+
+                    _unitOfWork.Product.Add(product);
+                    _unitOfWork.Feature.Add(featureModel);
+                    _unitOfWork.Save();
+                    return Json(new { success = true, message = "Producto creado exitosamente." });
                 }
                 else
                 {
-                    var error = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                    return Json(new { success = false, message = error });
+                    product.ModifiedDate = DateTime.Now;
+                    _unitOfWork.Product.Update(product);
+                    _unitOfWork.Save();
+                    return Json(new { success = true, message = "Producto actualizado exitosamente." });
                 }
             }
             else
             {
-                return Json(new { success = true, message = "El producto se ha guardado correctamente" });
+                var error = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Json(new { success = false, message = error });
             }
-            // if (ModelState.IsValid)
-            // {
-            //     return Json(new { success = true, message = "El producto se ha guardado correctamente" });
-            // }
-            // else
-            // {
-            //     var error = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            //     return Json(new { success = false, message = error });
-            // }
         }
         // Mostrar todas las marcas
         [HttpGet]
         public IActionResult GetAll()
         {
-            var allObj = _unitOfWork.Product.GetAll();
+            var allObj = _unitOfWork.Product.GetAll(
+                includeProperties: "Category,Brand"
+            );
             return Json(new { data = allObj });
         }
         // Crear o editar una marca debe de se de tipo post y por api json
         [HttpPost]
-        public IActionResult Create(ProductModel product)
+        public IActionResult Create(ProductModel product, FeatureViewModel feature)
         {
-            return CreateAndUpdateProduct(product);
+            return CreateAndUpdateProduct(product, feature);
         }
         // PUT - Editar una marca, override del método Upsert
         [HttpPut]
-        public IActionResult Update(ProductModel product)
+        public IActionResult Update(ProductModel product, FeatureViewModel feature)
         {
-            return CreateAndUpdateProduct(product);
+            return CreateAndUpdateProduct(product, feature);
         }
         // Mostrar una marca
         [HttpGet]

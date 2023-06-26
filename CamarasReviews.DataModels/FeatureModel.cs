@@ -10,7 +10,7 @@ public class FeatureModel
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
     [Display(Name = "Características")]
-    public string Description  { get; set; }
+    public string Description { get; set; }
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [Display(Name = "Producto")]
     public Guid ProductId { get; set; }
