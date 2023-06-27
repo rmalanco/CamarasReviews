@@ -26,23 +26,16 @@ namespace CamarasReviews.Areas.Author.Controllers
             ViewBag.Categories = _unitOfWork.Category.GetAllActiveCategories();
             ViewBag.Brands = _unitOfWork.Brand.GetAllActiveBrands();
             return View();
-            //ProductViewModel productViewModel = new()
-            //{
-            //    Product = new ProductModel(),
-            //    CategoryList = _unitOfWork.Category.GetAllActiveCategories(),
-            //    BrandList = _unitOfWork.Brand.GetAllActiveBrands()
-            //};
-            //return View(productViewModel);
         }
         #endregion
 
         #region Métodos de la pagina
-        // Crear una marca
+        // Crear una producto
 
         #endregion
 
         #region Métodos de la API
-        private IActionResult CreateAndUpdateProduct(ProductModel product, FeatureViewModel feature)
+        private IActionResult CreateAndUpdateProduct(ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
@@ -56,7 +49,7 @@ namespace CamarasReviews.Areas.Author.Controllers
                     {
                         FeatureId = Guid.NewGuid(),
                         ProductId = product.ProductId,
-                        Description = feature.Description,
+                        Description = product.FeatureDescription,
                         CreatedDate = DateTime.Now,
                         IsActive = true
                     };
@@ -80,64 +73,66 @@ namespace CamarasReviews.Areas.Author.Controllers
                 return Json(new { success = false, message = error });
             }
         }
-        // Mostrar todas las marcas
+        // Mostrar todos los productos activos
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAllActiveProducts()
         {
             var allObj = _unitOfWork.Product.GetAll(
+                s => s.IsActive,
+                orderBy: s => s.OrderByDescending(s => s.CreatedDate),
                 includeProperties: "Category,Brand"
-            );
+                );
             return Json(new { data = allObj });
         }
-        // Crear o editar una marca debe de se de tipo post y por api json
+        // Post - Crear un producto
         [HttpPost]
-        public IActionResult Create(ProductModel product, FeatureViewModel feature)
+        public IActionResult Create(ProductViewModel product)
         {
-            return CreateAndUpdateProduct(product, feature);
+            return CreateAndUpdateProduct(product);
         }
-        // PUT - Editar una marca, override del método Upsert
+        // PUT - Editar un producto
         [HttpPut]
-        public IActionResult Update(ProductModel product, FeatureViewModel feature)
+        public IActionResult Update(ProductViewModel product)
         {
-            return CreateAndUpdateProduct(product, feature);
+            return CreateAndUpdateProduct(product);
         }
-        // Mostrar una marca
+        // Mostrar un producto por ID
         [HttpGet]
-        public IActionResult GetByID(Guid id)
+        public IActionResult GetProductById(Guid id)
+        {
+            var objFromDb = _unitOfWork.Product.GetProduct(id);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error obteniendo el producto" });
+            }
+            return Json(new { success = true, data = objFromDb });
+        }
+        // Eliminar un producto - desactivar
+        [HttpDelete]
+        public IActionResult Delete(Guid id)
         {
             var objFromDb = _unitOfWork.Product.Get(id);
             if (objFromDb == null)
             {
-                return Json(new { success = false, message = "Error mostrando la marca" });
+                return Json(new { success = false, message = "Error eliminando el producto" });
             }
-            return Json(new { success = true, data = objFromDb });
+            _unitOfWork.Product.DisableProduct(id);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Producto eliminado correctamente" });
         }
-        // // Eliminar una marca - desactivar
-        // [HttpDelete]
-        // public IActionResult Delete(Guid id)
-        // {
-        //     var objFromDb = _unitOfWork.Product.Get(id);
-        //     if (objFromDb == null)
-        //     {
-        //         return Json(new { success = false, message = "Error eliminando la marca" });
-        //     }
-        //     _unitOfWork.Product.DisableProduct(id);
-        //     _unitOfWork.Save();
-        //     return Json(new { success = true, message = "Marca eliminada correctamente" });
-        // }
-        // // Activar una marca
-        // [HttpPatch]
-        // public IActionResult Active(Guid id)
-        // {
-        //     var objFromDb = _unitOfWork.Product.Get(id);
-        //     if (objFromDb == null)
-        //     {
-        //         return Json(new { success = false, message = "Error activando la marca" });
-        //     }
-        //     _unitOfWork.Product.EnableProduct(id);
-        //     _unitOfWork.Save();
-        //     return Json(new { success = true, message = "Marca activada correctamente" });
-        // }
+        // Activar un producto
+        [HttpPatch]
+        public IActionResult Active(Guid id)
+        {
+            var objFromDb = _unitOfWork.Product.Get(id);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error activando el producto" });
+            }
+            _unitOfWork.Product.EnableProduct(id);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Producto activado correctamente" });
+        }
         #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

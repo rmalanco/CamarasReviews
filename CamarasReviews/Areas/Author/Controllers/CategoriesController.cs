@@ -28,10 +28,10 @@ namespace CamarasReviews.Areas.Author.Controllers
         }
         #endregion
 
-        #region Métodos de la pagina
+        #region Mï¿½todos de la pagina
         #endregion
 
-        #region Métodos de la API
+        #region Mï¿½todos de la API
         private IActionResult CreateAndUpdateCategory(CategoryModel category)
         {
             if (ModelState.IsValid)
@@ -67,7 +67,7 @@ namespace CamarasReviews.Areas.Author.Controllers
         {
             return CreateAndUpdateCategory(category);
         }
-        // PUT - Editar una marca, override del método Upsert
+        // PUT - Editar una marca, override del mï¿½todo Upsert
         [HttpPut]
         public IActionResult Update(CategoryModel category)
         {
@@ -94,6 +94,7 @@ namespace CamarasReviews.Areas.Author.Controllers
                 return Json(new { success = false, message = "Error al eliminar la categoria." });
             }
             _unitOfWork.Category.DisableCategory(id);
+            // _unitOfWork.Category.Remove(objFromDb);
             _unitOfWork.Save();
             return Json(new { success = true, message = "Categoria eliminada correctamente." });
         }

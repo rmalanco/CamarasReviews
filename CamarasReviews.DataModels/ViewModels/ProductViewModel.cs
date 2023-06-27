@@ -8,13 +8,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CamarasReviews.Models.ViewModels
 {
-    public class ProductViewModel
+    public class ProductViewModel : ProductModel
     {
-        public string ProductId { get; set; }
-        public ProductModel Product { get; set; }
-        public IEnumerable<SelectListItem> CategoryList { get; set; }
-        public IEnumerable<SelectListItem> BrandList { get; set; }
-        [Display(Name = "Descripción de características")]
+        [Required(ErrorMessage = "El campo {0} es requerido.")]
+        [Display(Name = "Características del Producto")]
         public string FeatureDescription { get; set; }
     }
 }

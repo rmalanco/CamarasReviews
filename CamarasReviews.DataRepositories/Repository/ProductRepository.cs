@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CamarasReviews.Data;
 using CamarasReviews.Models;
+using CamarasReviews.Models.ViewModels;
 using CamarasReviews.Repository.Interfaces;
 
 namespace CamarasReviews.Repository
@@ -17,137 +18,55 @@ namespace CamarasReviews.Repository
         {
             _db = db;
         }
-        // public IEnumerable<ProductModel> FindWithCategoryAndBrand(Func<ProductModel, bool> predicate)
-        // {
-        //     var products = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
-        //         .Join(_db.Brands, pc => pc.p.BrandId, b => b.BrandId, (pc, b) => new { pc, b })
-        //         .Where(pc => predicate(pc.pc.p))
-        //         .Select(pc => new ProductModel
-        //         {
-        //             ProductId = pc.pc.p.ProductId,
-        //             Name = pc.pc.p.Name,
-        //             SKU = pc.pc.p.SKU,
-        //             Description = pc.pc.p.Description,
-        //             Price = pc.pc.p.Price,
-        //             CategoryId = pc.pc.p.CategoryId,
-        //             Category = pc.pc.c,
-        //             BrandId = pc.pc.p.BrandId,
-        //             Brand = pc.b
-        //         }).ToList();
-
-        //     return products;
-        // }
-
-        // public IEnumerable<ProductModel> GetAllWithCategoryAndBrand()
-        // {
-        //     var products = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
-        //         .Join(_db.Brands, pc => pc.p.BrandId, b => b.BrandId, (pc, b) => new { pc, b })
-        //         .Select(pc => new ProductModel
-        //         {
-        //             ProductId = pc.pc.p.ProductId,
-        //             Name = pc.pc.p.Name,
-        //             SKU = pc.pc.p.SKU,
-        //             Description = pc.pc.p.Description,
-        //             Price = pc.pc.p.Price,
-        //             CategoryId = pc.pc.p.CategoryId,
-        //             Category = pc.pc.c,
-        //             BrandId = pc.pc.p.BrandId,
-        //             Brand = pc.b
-        //         }).ToList();
-
-        //     return products;
-        // }
-
-        // public IEnumerable<ProductModel> GetAllWithCategoryAndBrandByBrand(Guid brandId)
-        // {
-        //     var products = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
-        //         .Join(_db.Brands, pc => pc.p.BrandId, b => b.BrandId, (pc, b) => new { pc, b })
-        //         .Where(pc => pc.b.BrandId == brandId)
-        //         .Select(pc => new ProductModel
-        //         {
-        //             ProductId = pc.pc.p.ProductId,
-        //             Name = pc.pc.p.Name,
-        //             SKU = pc.pc.p.SKU,
-        //             Description = pc.pc.p.Description,
-        //             Price = pc.pc.p.Price,
-        //             CategoryId = pc.pc.p.CategoryId,
-        //             Category = pc.pc.c,
-        //             BrandId = pc.pc.p.BrandId,
-        //             Brand = pc.b
-        //         }).ToList();
-        //     return products;
-        // }
-
-        // public IEnumerable<ProductModel> GetAllWithCategoryAndBrandByCategory(Guid categoryId)
-        // {
-        //     var products = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
-        //         .Join(_db.Brands, pc => pc.p.BrandId, b => b.BrandId, (pc, b) => new { pc, b })
-        //         .Where(pc => pc.pc.c.CategoryId == categoryId)
-        //         .Select(pc => new ProductModel
-        //         {
-        //             ProductId = pc.pc.p.ProductId,
-        //             Name = pc.pc.p.Name,
-        //             SKU = pc.pc.p.SKU,
-        //             Description = pc.pc.p.Description,
-        //             Price = pc.pc.p.Price,
-        //             CategoryId = pc.pc.p.CategoryId,
-        //             Category = pc.pc.c,
-        //             BrandId = pc.pc.p.BrandId,
-        //             Brand = pc.b
-        //         }).ToList();
-        //     return products;
-        // }
-
-        // public ProductModel GetWithCategoryAndBrand(Guid id)
-        // {
-        //     var product = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
-        //         .Join(_db.Brands, pc => pc.p.BrandId, b => b.BrandId, (pc, b) => new { pc, b })
-        //         .Where(pc => pc.pc.p.ProductId == id)
-        //         .Select(pc => new ProductModel
-        //         {
-        //             ProductId = pc.pc.p.ProductId,
-        //             Name = pc.pc.p.Name,
-        //             SKU = pc.pc.p.SKU,
-        //             Description = pc.pc.p.Description,
-        //             Price = pc.pc.p.Price,
-        //             CategoryId = pc.pc.p.CategoryId,
-        //             Category = pc.pc.c,
-        //             BrandId = pc.pc.p.BrandId,
-        //             Brand = pc.b
-        //         }).FirstOrDefault();
-        //     return product;
-        // }
-
-        // public ProductModel GetWithCategoryAndBrandBySKU(string sku)
-        // {
-        //     var product = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
-        //         .Join(_db.Brands, pc => pc.p.BrandId, b => b.BrandId, (pc, b) => new { pc, b })
-        //         .Where(pc => pc.pc.p.SKU == sku)
-        //         .Select(pc => new ProductModel
-        //         {
-        //             ProductId = pc.pc.p.ProductId,
-        //             Name = pc.pc.p.Name,
-        //             SKU = pc.pc.p.SKU,
-        //             Description = pc.pc.p.Description,
-        //             Price = pc.pc.p.Price,
-        //             CategoryId = pc.pc.p.CategoryId,
-        //             Category = pc.pc.c,
-        //             BrandId = pc.pc.p.BrandId,
-        //             Brand = pc.b
-        //         }).FirstOrDefault();
-        //     return product;
-        // }
-
         public void Update(ProductModel product)
         {
             var objFromDb = _db.Products.FirstOrDefault(s => s.ProductId == product.ProductId);
             objFromDb.Name = product.Name;
-            // objFromDb.SKU = product.SKU;
-            // objFromDb.Description = product.Description;
-            // objFromDb.Price = product.Price;
-            // objFromDb.CategoryId = product.CategoryId;
-            // objFromDb.BrandId = product.BrandId;
+            objFromDb.SKU = product.SKU;
+            objFromDb.Description = product.Description;
+            objFromDb.Price = product.Price;
+            objFromDb.CategoryId = product.CategoryId;
+            objFromDb.BrandId = product.BrandId;
             _db.SaveChanges();
+        }
+
+        public void DisableProduct(Guid id)
+        {
+            var objFromDb = _db.Products.FirstOrDefault(s => s.ProductId == id);
+            objFromDb.IsActive = false;
+            _db.SaveChanges();
+        }
+
+        public void EnableProduct(Guid id)
+        {
+            var objFromDb = _db.Products.FirstOrDefault(s => s.ProductId == id);
+            objFromDb.IsActive = true;
+            _db.SaveChanges();
+        }
+
+        // método para mostrar el producto, con su categoria, marca y feature description
+        public ProductViewModel GetProduct(Guid id)
+        {
+            //realizar un inner join de las tablas para obtener el producto con su categoria, marca y feature description
+            var product = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
+                .Join(_db.Brands, p => p.p.BrandId, b => b.BrandId, (p, b) => new { p, b })
+                .Join(_db.Features, p => p.p.p.ProductId, pf => pf.ProductId, (p, pf) => new { p, pf })
+                .Where(p => p.p.p.p.ProductId == id)
+                .Select(p => new ProductViewModel
+                {
+                    ProductId = p.p.p.p.ProductId,
+                    Name = p.p.p.p.Name,
+                    SKU = p.p.p.p.SKU,
+                    Description = p.p.p.p.Description,
+                    Price = p.p.p.p.Price,
+                    IsActive = p.p.p.p.IsActive,
+                    CategoryId = p.p.p.p.CategoryId,
+                    Category = p.p.p.c,
+                    BrandId = p.p.b.BrandId,
+                    Brand = p.p.b,
+                    FeatureDescription = p.pf.Description
+                }).FirstOrDefault();
+            return product;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CamarasReviews.Models;
 public class ProductModel
 {
     [Key]
-    public Guid ProductId { get; set; } 
+    public Guid ProductId { get; set; }
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
     [Display(Name = "Nombre del Producto")]

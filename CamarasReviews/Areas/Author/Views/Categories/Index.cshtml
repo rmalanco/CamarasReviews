@@ -185,10 +185,9 @@
 
         $("#btnAgregarCategoria").click(function (event) {
             event.preventDefault();
-            //cambiar el titulo del modal
+            $("#categoryId").val("");
             $("#modalAgregarCategoriaLabel").html("Agregar Categoría");
             $("#fromUpsert").trigger("reset");
-            //cambiar el texto del botón
             $("#btnAgregarCategoriaModal").html("Guardar");
         });
 

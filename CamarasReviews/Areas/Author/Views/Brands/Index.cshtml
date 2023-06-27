@@ -185,11 +185,9 @@
 
         $("#btnAgregarMarca").click(function (event) {
             event.preventDefault();
-            //cambiar el titulo del modal
+            $("#brandId").val("");
             $("#modalAgregarMarcaLabel").html("Agregar Marca");
-            //limpiar el formulario
             $("#fromUpsert").trigger("reset");
-            //cambiar el texto del botón
             $("#btnAgregarMarcaModal").html("Guardar");
         });
 
