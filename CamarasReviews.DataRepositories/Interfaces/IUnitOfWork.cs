@@ -7,5 +7,6 @@ public interface IUnitOfWork : IDisposable
     IFeatureRepository Feature { get; }
     ICategoryRepository Category { get; }
     IProductRepository Product { get; }
+    IProductImageRepository ProductImage { get; }
     void Save();
 }

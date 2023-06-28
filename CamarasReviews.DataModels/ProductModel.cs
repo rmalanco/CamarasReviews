@@ -23,12 +23,10 @@ public class ProductModel
     public double Price { get; set; }
     [Display(Name = "Categoría")]
     public Guid CategoryId { get; set; }
-    [ForeignKey("CategoryId")]
-    public CategoryModel Category { get; set; }
+    public CategoryModel? Category { get; set; }
     [Display(Name = "Marca")]
     public Guid BrandId { get; set; }
-    [ForeignKey("BrandId")]
-    public BrandModel Brand { get; set; }
+    public BrandModel? Brand { get; set; }
     [Display(Name = "Fecha de Creación")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = false)]
     public DateTime CreatedDate { get; set; } = DateTime.Now;

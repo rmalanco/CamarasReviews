@@ -11,6 +11,7 @@ public class UnitOfWork : IUnitOfWork
     public IFeatureRepository Feature { get; private set; }
     public ICategoryRepository Category { get; private set; }
     public IProductRepository Product { get; private set; }
+    public IProductImageRepository ProductImage { get; private set; }
 
     public UnitOfWork(ApplicationDbContext db)
     {
@@ -20,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
         Feature = new FeatureRepository(_db);
         Category = new CategoryRepository(_db);
         Product = new ProductRepository(_db);
+        ProductImage = new ProductImageRepository(_db);
     }
 
     public void Save()

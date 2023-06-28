@@ -18,6 +18,11 @@ namespace CamarasReviews.Repository
             _db = db;
         }
 
+        public FeatureModel GetFeatureByProductId(Guid productId)
+        {
+            return _db.Features.FirstOrDefault(f => f.ProductId == productId);
+        }
+
         public void Update(FeatureModel feature)
         {
             var objFromDb = _db.Features.FirstOrDefault(s => s.FeatureId == feature.FeatureId);

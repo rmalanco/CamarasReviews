@@ -9,5 +9,6 @@ namespace CamarasReviews.Repository.Interfaces
     public interface IFeatureRepository : IRepository<FeatureModel>
     {
         void Update(FeatureModel feature);
+        FeatureModel GetFeatureByProductId(Guid productId);
     }
 }

@@ -23,9 +23,15 @@ namespace CamarasReviews.Areas.Author.Controllers
         // Vista principal
         public IActionResult Index()
         {
-            ViewBag.Categories = _unitOfWork.Category.GetAllActiveCategories();
-            ViewBag.Brands = _unitOfWork.Brand.GetAllActiveBrands();
-            return View();
+            //ViewBag.Categories = _unitOfWork.Category.GetAllActiveCategories();
+            //ViewBag.Brands = _unitOfWork.Brand.GetAllActiveBrands();
+            //return View();
+            ProductViewModel productViewModel = new ProductViewModel()
+            {
+                ListOfCategories = _unitOfWork.Category.GetAllActiveCategories(),
+                ListOfBrands = _unitOfWork.Brand.GetAllActiveBrands()
+            };
+            return View(productViewModel);
         }
         #endregion
 
@@ -54,6 +60,43 @@ namespace CamarasReviews.Areas.Author.Controllers
                         IsActive = true
                     };
 
+                    if (product.Files != null)
+                    {
+                        foreach (var file in product.Files)
+                        {
+                            string rootFolder = _hostEnvironment.WebRootPath;
+                            string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                            string extension = Path.GetExtension(file.FileName);
+                            fileName = Guid.NewGuid() + extension;
+                            string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
+                            using (var fileStream = new FileStream(path, FileMode.Create))
+                            {
+                                file.CopyTo(fileStream);
+                            }
+                            var productImage = new ProductImageModel
+                            {
+                                ProductImageId = Guid.NewGuid(),
+                                ProductId = product.ProductId,
+                                UrlImagen = @"/imagenes/productos/" + fileName,
+                                CreatedDate = DateTime.Now,
+                                IsActive = true
+                            };
+                            _unitOfWork.ProductImage.Add(productImage);
+                        }
+                    }
+                    else
+                    {
+                        var productImage = new ProductImageModel
+                        {
+                            ProductImageId = Guid.NewGuid(),
+                            ProductId = product.ProductId,
+                            UrlImagen = @"/imagenes/productos/default.png",
+                            CreatedDate = DateTime.Now,
+                            IsActive = true
+                        };
+                        _unitOfWork.ProductImage.Add(productImage);
+                    }
+
                     _unitOfWork.Product.Add(product);
                     _unitOfWork.Feature.Add(featureModel);
                     _unitOfWork.Save();
@@ -61,8 +104,61 @@ namespace CamarasReviews.Areas.Author.Controllers
                 }
                 else
                 {
-                    product.ModifiedDate = DateTime.Now;
-                    _unitOfWork.Product.Update(product);
+                    var productFromDb = _unitOfWork.Product.Get(product.ProductId);
+                    var featureFromDb = _unitOfWork.Feature.GetFeatureByProductId(product.ProductId);
+                    
+                    productFromDb.Name = product.Name;
+                    productFromDb.SKU = product.SKU;
+                    productFromDb.Description = product.Description;
+                    productFromDb.Price = product.Price;
+                    productFromDb.CategoryId = product.CategoryId;
+                    productFromDb.BrandId = product.BrandId;
+                    productFromDb.ModifiedDate = DateTime.Now;
+
+                    featureFromDb.Description = product.FeatureDescription;
+                    featureFromDb.ModifiedDate = DateTime.Now;
+                    // Actualizar imágenes del producto
+                    if (product.Files != null && product.Files.Count > 0)
+                    {
+                        // Eliminar imágenes existentes
+                        var productImagesFromDb = _unitOfWork.ProductImage.GetProductImagesByProductId(product.ProductId);
+                        foreach (var productImage in productImagesFromDb)
+                        {
+                            //string rootFolder = _hostEnvironment.WebRootPath;
+                            //string path = Path.Combine(rootFolder + productImage.UrlImagen.TrimStart('~'));
+                            //if (System.IO.File.Exists(path))
+                            //{
+                            //    System.IO.File.Delete(path);
+                            //}
+                            _unitOfWork.ProductImage.DisableImage(productImage.ProductImageId);
+                        }
+
+                        // Agregar nuevas imágenes
+                        foreach (var file in product.Files)
+                        {
+                            string rootFolder = _hostEnvironment.WebRootPath;
+                            string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                            string extension = Path.GetExtension(file.FileName);
+                            fileName = Guid.NewGuid() + extension;
+                            string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
+                            using (var fileStream = new FileStream(path, FileMode.Create))
+                            {
+                                file.CopyTo(fileStream);
+                            }
+                            var productImage = new ProductImageModel
+                            {
+                                ProductImageId = Guid.NewGuid(),
+                                ProductId = product.ProductId,
+                                UrlImagen = "/imagenes/productos/" + fileName,
+                                CreatedDate = DateTime.Now,
+                                IsActive = true
+                            };
+                            _unitOfWork.ProductImage.Add(productImage);
+                        }
+                    }
+
+                    _unitOfWork.Product.Update(productFromDb);
+                    _unitOfWork.Feature.Update(featureFromDb);
                     _unitOfWork.Save();
                     return Json(new { success = true, message = "Producto actualizado exitosamente." });
                 }
