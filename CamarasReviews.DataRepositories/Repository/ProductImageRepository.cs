@@ -44,7 +44,7 @@ namespace CamarasReviews.Repository
 
         public List<ProductImageModel> GetProductImagesByProductId(Guid productId)
         {
-            return _db.ProductImages.Where(x => x.ProductId == productId).ToList();
+            return _db.ProductImages.Where(x => x.ProductId == productId && x.IsActive).ToList();
         }
 
         public void Update(ProductImageModel productImage)

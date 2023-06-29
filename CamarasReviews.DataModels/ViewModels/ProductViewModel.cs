@@ -19,6 +19,6 @@ namespace CamarasReviews.Models.ViewModels
 
         // lista de archivos que recibimos desde el formulario para subir al servidor es de tipo IFormFile:
         [Display(Name = "Imagenes del Producto")]
-        public List<IFormFile> Files { get; set; }
+        public List<IFormFile>? Files { get; set; }
     }
 }

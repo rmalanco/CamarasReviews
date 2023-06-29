@@ -84,18 +84,18 @@ namespace CamarasReviews.Areas.Author.Controllers
                             _unitOfWork.ProductImage.Add(productImage);
                         }
                     }
-                    else
-                    {
-                        var productImage = new ProductImageModel
-                        {
-                            ProductImageId = Guid.NewGuid(),
-                            ProductId = product.ProductId,
-                            UrlImagen = @"/imagenes/productos/default.png",
-                            CreatedDate = DateTime.Now,
-                            IsActive = true
-                        };
-                        _unitOfWork.ProductImage.Add(productImage);
-                    }
+                    // else
+                    // {
+                    //     var productImage = new ProductImageModel
+                    //     {
+                    //         ProductImageId = Guid.NewGuid(),
+                    //         ProductId = product.ProductId,
+                    //         UrlImagen = @"/imagenes/productos/default.png",
+                    //         CreatedDate = DateTime.Now,
+                    //         IsActive = true
+                    //     };
+                    //     _unitOfWork.ProductImage.Add(productImage);
+                    // }
 
                     _unitOfWork.Product.Add(product);
                     _unitOfWork.Feature.Add(featureModel);
@@ -106,7 +106,7 @@ namespace CamarasReviews.Areas.Author.Controllers
                 {
                     var productFromDb = _unitOfWork.Product.Get(product.ProductId);
                     var featureFromDb = _unitOfWork.Feature.GetFeatureByProductId(product.ProductId);
-                    
+
                     productFromDb.Name = product.Name;
                     productFromDb.SKU = product.SKU;
                     productFromDb.Description = product.Description;
@@ -117,23 +117,37 @@ namespace CamarasReviews.Areas.Author.Controllers
 
                     featureFromDb.Description = product.FeatureDescription;
                     featureFromDb.ModifiedDate = DateTime.Now;
-                    // Actualizar imágenes del producto
-                    if (product.Files != null && product.Files.Count > 0)
-                    {
-                        // Eliminar imágenes existentes
-                        var productImagesFromDb = _unitOfWork.ProductImage.GetProductImagesByProductId(product.ProductId);
-                        foreach (var productImage in productImagesFromDb)
-                        {
-                            //string rootFolder = _hostEnvironment.WebRootPath;
-                            //string path = Path.Combine(rootFolder + productImage.UrlImagen.TrimStart('~'));
-                            //if (System.IO.File.Exists(path))
-                            //{
-                            //    System.IO.File.Delete(path);
-                            //}
-                            _unitOfWork.ProductImage.DisableImage(productImage.ProductImageId);
-                        }
 
-                        // Agregar nuevas imágenes
+                    // Eliminar las imagenes del producto
+                    var productImagesFromDb = _unitOfWork.ProductImage.GetAll(
+                        s => s.ProductId == product.ProductId,
+                        includeProperties: "Product"
+                        );
+                    foreach (var productImage in productImagesFromDb)
+                    {
+                        string rootFolder = _hostEnvironment.WebRootPath;
+                        string fileName = Path.GetFileNameWithoutExtension(productImage.UrlImagen);
+                        string extension = Path.GetExtension(productImage.UrlImagen);
+                        string[] fileNameArray = fileName.Split("/");
+                        fileName = fileNameArray[^1] + extension;
+                        // if (fileName != "default.png")
+                        // {
+                        //     string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
+                        //     System.IO.File.Delete(path);
+                        //     _unitOfWork.ProductImage.Remove(productImage);
+                        // }
+                        // else
+                        // {
+                        //     _unitOfWork.ProductImage.Remove(productImage);
+                        // }
+                        string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
+                        System.IO.File.Delete(path);
+                        _unitOfWork.ProductImage.Remove(productImage);
+                    }
+
+                    // Agregar las nuevas imagenes del producto
+                    if (product.Files != null)
+                    {
                         foreach (var file in product.Files)
                         {
                             string rootFolder = _hostEnvironment.WebRootPath;
@@ -149,13 +163,25 @@ namespace CamarasReviews.Areas.Author.Controllers
                             {
                                 ProductImageId = Guid.NewGuid(),
                                 ProductId = product.ProductId,
-                                UrlImagen = "/imagenes/productos/" + fileName,
+                                UrlImagen = @"/imagenes/productos/" + fileName,
                                 CreatedDate = DateTime.Now,
                                 IsActive = true
                             };
                             _unitOfWork.ProductImage.Add(productImage);
                         }
                     }
+                    // else
+                    // {
+                    //     var productImage = new ProductImageModel
+                    //     {
+                    //         ProductImageId = Guid.NewGuid(),
+                    //         ProductId = product.ProductId,
+                    //         UrlImagen = @"/imagenes/productos/default.png",
+                    //         CreatedDate = DateTime.Now,
+                    //         IsActive = true
+                    //     };
+                    //     _unitOfWork.ProductImage.Add(productImage);
+                    // }
 
                     _unitOfWork.Product.Update(productFromDb);
                     _unitOfWork.Feature.Update(featureFromDb);
@@ -203,6 +229,18 @@ namespace CamarasReviews.Areas.Author.Controllers
             }
             return Json(new { success = true, data = objFromDb });
         }
+        // mostrar las imagenes de producto por ID
+        [HttpGet]
+        public IActionResult GetImagesProductById(Guid id)
+        {
+            var objFromDb = _unitOfWork.ProductImage.GetProductImagesByProductId(id);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error obteniendo las imagenes del producto" });
+            }
+            return Json(new { success = true, data = objFromDb });
+        }
+
         // Eliminar un producto - desactivar
         [HttpDelete]
         public IActionResult Delete(Guid id)
@@ -215,6 +253,34 @@ namespace CamarasReviews.Areas.Author.Controllers
             _unitOfWork.Product.DisableProduct(id);
             _unitOfWork.Save();
             return Json(new { success = true, message = "Producto eliminado correctamente" });
+        }
+
+        // Eliminar una imagen de producto
+        [HttpDelete]
+        public IActionResult DeleteImageProduct(Guid id)
+        {
+            var objFromDb = _unitOfWork.ProductImage.Get(id);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error eliminando la imagen del producto" });
+            }
+            string rootFolder = _hostEnvironment.WebRootPath;
+            string fileName = Path.GetFileNameWithoutExtension(objFromDb.UrlImagen);
+            string extension = Path.GetExtension(objFromDb.UrlImagen);
+            string[] fileNameArray = fileName.Split("/");
+            fileName = fileNameArray[^1] + extension;
+            if (fileName != "default.png")
+            {
+                string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
+                System.IO.File.Delete(path);
+                _unitOfWork.ProductImage.Remove(objFromDb);
+            }
+            else
+            {
+                _unitOfWork.ProductImage.Remove(objFromDb);
+            }
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Imagen eliminada correctamente" });
         }
         // Activar un producto
         [HttpPatch]

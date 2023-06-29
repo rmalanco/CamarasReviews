@@ -47,7 +47,7 @@ namespace CamarasReviews.Repository
         // método para mostrar el producto, con su categoria, marca y feature description
         public ProductViewModel GetProduct(Guid id)
         {
-            //realizar un inner join de las tablas para obtener el producto con su categoria, marca y feature description
+            //realizar un inner join de las tablas para obtener el producto con su categoria, marca y feature description e incluir todas las imagenes del producto
             var product = _db.Products.Join(_db.Categories, p => p.CategoryId, c => c.CategoryId, (p, c) => new { p, c })
                 .Join(_db.Brands, p => p.p.BrandId, b => b.BrandId, (p, b) => new { p, b })
                 .Join(_db.Features, p => p.p.p.ProductId, pf => pf.ProductId, (p, pf) => new { p, pf })

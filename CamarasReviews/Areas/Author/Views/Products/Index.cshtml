@@ -22,7 +22,7 @@
 </div>
 <!-- End Botones de la página para agregar y exportar -->
 <!-- Modal para agregar -->
-<!-- Modal -->
+<!-- Modal Productos -->
 <div class="modal fade" id="modalAgregarProducto" tabindex="-1" aria-labelledby="modalAgregarProductoLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -98,13 +98,37 @@
                             <div class="mb-3 row" id="preview">
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btnAgregarProductoModal" class="btn btn-primary">Guardar</button>
                     <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<!-- End Modal para agregar -->
+<!-- Modal Imagenes -->
+<div class="modal fade" id="modalImagenes" tabindex="-1" aria-labelledby="modalImagenesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <input type="hidden" id="productIdForImages" name="productIdForImages" />
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalImagenesLabel">Imagenes del producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-3 row" id="ProductImages">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -166,10 +190,13 @@
                     render: function (data) {
                         return `
                                 <div class="text-center">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalImagenes" onclick="GetImagesProductById('${data}')">
+                                        <i class="fas fa-images"></i>
+                                    </button>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto" onclick="GetProductById('/Author/Products/GetProductById/${data}')">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                            <button type="button" class="btn btn-danger" onclick="Delete('/Author/Products/Delete/${data}')">
+                                    <button type="button" class="btn btn-danger" onclick="Delete('/Author/Products/Delete/${data}')">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </div>
@@ -326,6 +353,11 @@
         }
 
         $("#btnAgregarProducto").on("click", function () {
+            // cambiar el titulo del modal
+            $("#modalAgregarProductoLabel").html("Agregar Producto");
+            // mostrar el files input
+            //$("#multi-selector-uniq").show();
+            // limpiar el formulario
             $("#productId").val("");
             $("#fromUpsert")[0].reset(); // Reinicia el formulario
             filesList = []; // Reinicia la lista de archivos seleccionados
@@ -349,16 +381,12 @@
             data.append("BrandId", productBrandId);
             data.append("CategoryId", productCategoryId);
             data.append("FeatureDescription", productFeature);
-            // recibir los archivos de input tipo file id="files"
-            let files = $("#files").get(0).files;
-            // recorrer los archivos
-            for (let i = 0; i < files.length; i++) {
-                //console.log("Nombre: " + files[i].name);
-                data.append("Files", files[i]);
-            }
-            
             if ($("#productId").val() == "" || $("#productId").val() == null) {
                 let url = "/Author/Products/Create";
+                let files = $("#files").get(0).files;
+                for (let i = 0; i < files.length; i++) {
+                    data.append("Files", files[i]);
+                }
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -378,6 +406,10 @@
             } else {
                 let url = "/Author/Products/Update";
                 data.append("ProductId", $("#productId").val());
+                let files = $("#files").get(0).files;
+                for (let i = 0; i < files.length; i++) {
+                    data.append("Files", files[i]);
+                }
                 $.ajax({
                     type: "PUT",
                     url: url,
@@ -398,6 +430,11 @@
         });
 
         function GetProductById(url) {
+            // cambiar el titulo del modal
+            $("#modalAgregarProductoLabel").html("Editar Producto");
+            $("#fromUpsert")[0].reset();
+            filesList = []; 
+            renderPreviews(filesList, multiSelectorUniqPreview, fileInputMulti);
             $.ajax({
                 url: url,
                 type: "GET",
@@ -412,11 +449,84 @@
                     $("#marcaProducto").val(product.brandId.toUpperCase());
                     $("#categoriaProducto").val(product.categoryId.toUpperCase());
                     $("#featureName").val(product.featureDescription);
+                    //$("#multi-selector-uniq").hide();
                     $("#modalAgregarProducto").modal("show");
                 },
                 error: function (error) {
                     console.log(error);
                 },
+            });
+        }
+
+        function GetImagesProductById(id){
+            $("#productIdForImages").val(id);
+            $.ajax({
+                url: "/Author/Products/GetImagesProductById/" + id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let imagesProduct = data.data;
+                    const targetImagesProduct = document.querySelector("#ProductImages");
+                    targetImagesProduct.innerHTML = "";
+                    if(imagesProduct.length == 0){
+                        targetImagesProduct.innerHTML += `
+                        <div class="col-md-12">
+                            <div class="alert alert-warning" role="alert">
+                                <h4 class="alert-heading">No hay imagenes</h4>
+                                <p>No hay imagenes para este producto.</p>
+                            </div>
+                        </div>
+                        `;
+                    } else {
+                        imagesProduct.forEach((imagen) => {
+                            targetImagesProduct.innerHTML += `
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <img src="${imagen.urlImagen}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <button class="btn btn-danger btn-sm" onclick="DeleteImageProduct('${imagen.productImageId}')">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+        }
+
+        function DeleteImageProduct(id){
+            Swal.fire({
+                title: "¿Estás seguro de eliminar la imagen?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Cancelar",
+                confirmButtonText: "Sí, eliminar",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/Author/Products/DeleteImageProduct/" + id,
+                        type: "DELETE",
+                        success: function (response) {
+                            console.log(response);
+                            if (response.success) {
+                                GetImagesProductById($("#productIdForImages").val());
+                                toastr.success(response.message);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        },
+                    });
+                }
             });
         }
 
