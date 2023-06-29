@@ -23,9 +23,6 @@ namespace CamarasReviews.Areas.Author.Controllers
         // Vista principal
         public IActionResult Index()
         {
-            //ViewBag.Categories = _unitOfWork.Category.GetAllActiveCategories();
-            //ViewBag.Brands = _unitOfWork.Brand.GetAllActiveBrands();
-            //return View();
             ProductViewModel productViewModel = new ProductViewModel()
             {
                 ListOfCategories = _unitOfWork.Category.GetAllActiveCategories(),
@@ -84,18 +81,6 @@ namespace CamarasReviews.Areas.Author.Controllers
                             _unitOfWork.ProductImage.Add(productImage);
                         }
                     }
-                    // else
-                    // {
-                    //     var productImage = new ProductImageModel
-                    //     {
-                    //         ProductImageId = Guid.NewGuid(),
-                    //         ProductId = product.ProductId,
-                    //         UrlImagen = @"/imagenes/productos/default.png",
-                    //         CreatedDate = DateTime.Now,
-                    //         IsActive = true
-                    //     };
-                    //     _unitOfWork.ProductImage.Add(productImage);
-                    // }
 
                     _unitOfWork.Product.Add(product);
                     _unitOfWork.Feature.Add(featureModel);
@@ -130,16 +115,6 @@ namespace CamarasReviews.Areas.Author.Controllers
                         string extension = Path.GetExtension(productImage.UrlImagen);
                         string[] fileNameArray = fileName.Split("/");
                         fileName = fileNameArray[^1] + extension;
-                        // if (fileName != "default.png")
-                        // {
-                        //     string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
-                        //     System.IO.File.Delete(path);
-                        //     _unitOfWork.ProductImage.Remove(productImage);
-                        // }
-                        // else
-                        // {
-                        //     _unitOfWork.ProductImage.Remove(productImage);
-                        // }
                         string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
                         System.IO.File.Delete(path);
                         _unitOfWork.ProductImage.Remove(productImage);
@@ -170,18 +145,6 @@ namespace CamarasReviews.Areas.Author.Controllers
                             _unitOfWork.ProductImage.Add(productImage);
                         }
                     }
-                    // else
-                    // {
-                    //     var productImage = new ProductImageModel
-                    //     {
-                    //         ProductImageId = Guid.NewGuid(),
-                    //         ProductId = product.ProductId,
-                    //         UrlImagen = @"/imagenes/productos/default.png",
-                    //         CreatedDate = DateTime.Now,
-                    //         IsActive = true
-                    //     };
-                    //     _unitOfWork.ProductImage.Add(productImage);
-                    // }
 
                     _unitOfWork.Product.Update(productFromDb);
                     _unitOfWork.Feature.Update(featureFromDb);
