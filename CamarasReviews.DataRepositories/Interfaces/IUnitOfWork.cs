@@ -8,5 +8,6 @@ public interface IUnitOfWork : IDisposable
     ICategoryRepository Category { get; }
     IProductRepository Product { get; }
     IProductImageRepository ProductImage { get; }
+    IReviewImageRepository ReviewImage { get; }
     void Save();
 }

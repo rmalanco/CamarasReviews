@@ -43,7 +43,7 @@ namespace CamarasReviews.Repository
 
         public IEnumerable<SelectListItem> GetAllActiveBrands()
         {
-            return _db.Brands.Where(s => s.IsActive == true).Select(i => new SelectListItem()
+            return _db.Brands.Where(s => s.IsActive).Select(i => new SelectListItem()
             {
                 Text = i.Name,
                 Value = i.BrandId.ToString()
@@ -61,7 +61,7 @@ namespace CamarasReviews.Repository
 
         public IEnumerable<SelectListItem> GetAllDisabledBrands()
         {
-            return _db.Brands.Where(s => s.IsActive == false).Select(i => new SelectListItem()
+            return _db.Brands.Where(s => !s.IsActive).Select(i => new SelectListItem()
             {
                 Text = i.Name,
                 Value = i.BrandId.ToString()

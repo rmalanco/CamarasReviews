@@ -1,70 +1,117 @@
 @model CamarasReviews.Models.ViewModels.ReviewViewModel
 @{
-  ViewData["Title"] = "Crear Reseña";
+    ViewData["Title"] = "Crear Reseña";
 }
 <!-- Encabezado de la página -->
 <h1 class="mt-4">@ViewData["Title"]</h1>
 <ol class="breadcrumb mb-4">
-  <li class="breadcrumb-item active">@ViewData["Title"]</li>
+    <li class="breadcrumb-item active">@ViewData["Title"]</li>
 </ol>
 <!-- Formulario de creación de reseña -->
 <div class="row">
-  <form asp-action="Create" enctype="multipart/form-data" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="card mb-4">
-      <div class="card-header">
-        <i class="fas fa-table mr-1"></i>
-        Datos de la reseña
-      </div>
-      <div class="card-body">
-          <div class="form-group">
-            <label asp-for="Review.Title" class="control-label"></label>
-            <input asp-for="Review.Title" class="form-control" />
-            <span asp-validation-for="Review.Title" class="text-danger"></span>
-          </div>
-          <div class="form-group mt-3">
-            <label asp-for="Review.ShortDescription" class="control-label"></label>
-            <input asp-for="Review.ShortDescription" class="form-control" />
-            <span asp-validation-for="Review.ShortDescription" class="text-danger"></span>
-          </div>
-          <div class="form-group mt-3">
-            <label asp-for="Review.LongDescription" class="control-label"></label>
-            <textarea asp-for="Review.LongDescription" class="form-control"></textarea>
-            <span asp-validation-for="Review.LongDescription" class="text-danger"></span>
-          </div>
-          <div class="form-group mt-3">
-              <label asp-for="Review.Pros" class="control-label"></label>
-              <textarea asp-for="Review.Pros" class="form-control"></textarea>
-              <span asp-validation-for="Review.Pros" class="text-danger"></span>
-          </div>
-          <div class="form-group mt-3">
-              <label asp-for="Review.Cons" class="control-label"></label>
-              <textarea asp-for="Review.Cons" class="form-control"></textarea>
-              <span asp-validation-for="Review.Cons" class="text-danger"></span>
-          </div>
-          <div class="form-group mt-3">
-            <label asp-for="Review.ReviewImages" class="control-label"></label>
-            <input type="file" name="Review.ReviewImages" multiple class="form-control-file" />
-            <span asp-validation-for="Review.ReviewImages" class="text-danger"></span>
-          </div>
-      </div>
-    </div>
-    <div class="card mb-4">
-      <div class="card-header">
-        <i class="fas fa-table mr-1"></i>
-        Datos del producto
-      </div>
-      <div class="card-body">
-      </div>
-    </div>
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="form-group">
-              <input type="submit" value="Crear" class="btn btn-primary" />
-              <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <form asp-action="Create" enctype="multipart/form-data" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Datos de la reseña
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="Review.Title" class="control-label"></label>
+                    <input asp-for="Review.Title" class="form-control" />
+                    <span asp-validation-for="Review.Title" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="Review.ShortDescription" class="control-label"></label>
+                    <input asp-for="Review.ShortDescription" class="form-control" />
+                    <span asp-validation-for="Review.ShortDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="Review.LongDescription" class="control-label"></label>
+                    <textarea asp-for="Review.LongDescription" class="form-control"></textarea>
+                    <span asp-validation-for="Review.LongDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="Review.Pros" class="control-label"></label>
+                    <textarea asp-for="Review.Pros" class="form-control"></textarea>
+                    <span asp-validation-for="Review.Pros" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="Review.Cons" class="control-label"></label>
+                    <textarea asp-for="Review.Cons" class="form-control"></textarea>
+                    <span asp-validation-for="Review.Cons" class="text-danger"></span>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </form>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Datos del producto
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="mb-3">
+                        <label asp-for="Product.Name" class="form-label"></label>
+                        <input asp-for="Product.Name" class="form-control" id="nombreProducto" />
+                        <span asp-validation-for="Product.Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="mb-3">
+                        <label asp-for="Product.Description" class="form-label"></label>
+                        <textarea asp-for="Product.Description" class="form-control" id="descripcionProducto" rows="3"></textarea>
+                        <span asp-validation-for="Product.Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="mb-3">
+                        <label asp-for="Feature.Description" class="form-label"></label>
+                        <textarea asp-for="Feature.Description" class="form-control" id="featureName" rows="3"></textarea>
+                        <span asp-validation-for="Feature.Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label asp-for="Product.SKU" class="form-label"></label>
+                            <input asp-for="Product.SKU" class="form-control" id="skuProducto" />
+                            <span asp-validation-for="Product.SKU" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label asp-for="Product.Price" class="form-label"></label>
+                            <input type="number" asp-for="Product.Price" class="form-control" id="precioProducto" value="0.00" />
+                            <span class="text-muted">Precio en USD</span>
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label asp-for="Product.BrandId" class="form-label"></label>
+                            @Html.DropDownListFor(model => model.Product.BrandId, Model.ListOfBrands, "Seleccione una marca", new { @class = "form-control", @id = "marcaProducto" })
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label asp-for="Product.CategoryId" class="form-label"></label>
+                            @Html.DropDownListFor(model => model.Product.CategoryId, Model.ListOfCategories, "Seleccione una categoría", new { @class = "form-control", @id = "categoriaProducto" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="form-group">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 

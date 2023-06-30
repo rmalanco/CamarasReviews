@@ -11,11 +11,9 @@ public class FeatureModel
     [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
     [Display(Name = "Características")]
     public string Description { get; set; }
-    [Required(ErrorMessage = "El campo {0} es requerido.")]
     [Display(Name = "Producto")]
     public Guid ProductId { get; set; }
-    [ForeignKey("ProductId")]
-    public ProductModel Product { get; set; }
+    public ProductModel? Product { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public DateTime? ModifiedDate { get; set; }
     public DateTime? DeletedDate { get; set; }

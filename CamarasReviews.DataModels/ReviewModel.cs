@@ -36,15 +36,11 @@ public class ReviewModel
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
     public bool IsActive { get; set; } = true;
-    [Required]
-    public string AuthorId { get; set; }
-    [ForeignKey("AuthorId")]
-    public ApplicationUser Author { get; set; }
-    [Required]
+    public string? AuthorId { get; set; }
+    public ApplicationUser? Author { get; set; }
     public Guid ProductId { get; set; }
-    [ForeignKey("ProductId")]
-    public ProductModel Product { get; set; }
+    public ProductModel? Product { get; set; }
     [Display(Name = "Imágenes de la Reseña")]
-    public ICollection<ReviewImageModel> ReviewImages { get; set; }
-    public ICollection<TagModel> Tags { get; set; }
+    public ICollection<ReviewImageModel>? ReviewImages { get; set; }
+    public ICollection<TagModel>? Tags { get; set; }
 }
