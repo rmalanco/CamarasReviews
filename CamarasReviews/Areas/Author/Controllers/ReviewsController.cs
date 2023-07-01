@@ -37,10 +37,28 @@ namespace CamarasReviews.Areas.Author.Controllers
                 Review = new ReviewModel(),
                 Product = new ProductModel(),
                 Feature = new FeatureModel(),
-                ProductImage = new ProductImageModel(),
-                ReviewImage = new ReviewImageModel(),
-                ListOfCategories = _unitOfWork.Category.GetAllActiveCategories(),
-                ListOfBrands = _unitOfWork.Brand.GetAllActiveBrands()
+                ListOfBrands = _unitOfWork.Brand.GetAllActiveBrands(),
+                ListOfCategories = _unitOfWork.Category.GetAllActiveCategories()
+            };
+            return View(reviewViewModel);
+        }
+
+        public IActionResult Edit(Guid id)
+        {
+            var review = _unitOfWork.Review.Get(id);
+            if (review == null)
+            {
+                return NotFound();
+            }
+            var product = _unitOfWork.Product.Get(review.ProductId);
+            var feature = _unitOfWork.Feature.Get(review.ProductId);
+            ReviewViewModel reviewViewModel = new()
+            {
+                Review = review,
+                Product = product,
+                Feature = feature,
+                ListOfBrands = _unitOfWork.Brand.GetAllActiveBrands(),
+                ListOfCategories = _unitOfWork.Category.GetAllActiveCategories()
             };
             return View(reviewViewModel);
         }
@@ -53,89 +71,106 @@ namespace CamarasReviews.Areas.Author.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (reviewViewModel.Product.ProductId == Guid.Empty)
+                var AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var review = reviewViewModel.Review;
+                var product = reviewViewModel.Product;
+                var feature = reviewViewModel.Feature;
+                // creamos primero el producto
+                product.ProductId = Guid.NewGuid();
+                product.CreatedDate = DateTime.Now;
+                product.IsActive = true;
+                // creamos el feature
+                feature.FeatureId = Guid.NewGuid();
+                feature.ProductId = product.ProductId;
+                feature.CreatedDate = DateTime.Now;
+                feature.IsActive = true;
+                // creamos el review
+                review.ReviewId = Guid.NewGuid();
+                review.ProductId = product.ProductId;
+                review.AuthorId = AuthorId;
+                review.CreatedDate = DateTime.Now;
+                review.IsActive = true;
+                // agregamos las imagenes a el producto
+                if (reviewViewModel.ProductImages != null)
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    // Producto
-                    reviewViewModel.Product.ProductId = Guid.NewGuid();
-                    reviewViewModel.Product.CreatedDate = DateTime.Now;
-                    reviewViewModel.Product.IsActive = true;
-
-                    // Caracteristica
-                    reviewViewModel.Feature.FeatureId = Guid.NewGuid();
-                    reviewViewModel.Feature.ProductId = reviewViewModel.Product.ProductId;
-                    reviewViewModel.Feature.CreatedDate = DateTime.Now;
-                    reviewViewModel.Feature.IsActive = true;
-
-                    // imagenes del producto
-                    if (reviewViewModel.FilesProduct != null)
+                    foreach (var file in reviewViewModel.ProductImages)
                     {
-                        foreach (var file in reviewViewModel.FilesProduct)
+                        string rootFolder = _hostEnvironment.WebRootPath;
+                        string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                        string extension = Path.GetExtension(file.FileName);
+                        fileName = Guid.NewGuid() + extension;
+                        string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
                         {
-                            string rootFolder = _hostEnvironment.WebRootPath;
-                            string fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                            string extension = Path.GetExtension(file.FileName);
-                            fileName = Guid.NewGuid() + extension;
-                            string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
-                            using (var fileStream = new FileStream(path, FileMode.Create))
-                            {
-                                file.CopyTo(fileStream);
-                            }
-                            reviewViewModel.ProductImage.ProductImageId = Guid.NewGuid();
-                            reviewViewModel.ProductImage.ProductId = reviewViewModel.Product.ProductId;
-                            reviewViewModel.ProductImage.UrlImagen = @"/imagenes/productos/" + fileName;
-                            reviewViewModel.ProductImage.CreatedDate = DateTime.Now;
-                            reviewViewModel.ProductImage.IsActive = true;
-
-                            _unitOfWork.ProductImage.Add(reviewViewModel.ProductImage);
+                            file.CopyTo(fileStream);
                         }
-                    }
-
-                    // review
-                    reviewViewModel.Review.ReviewId = Guid.NewGuid();
-                    reviewViewModel.Review.ProductId = reviewViewModel.Product.ProductId;
-                    reviewViewModel.Review.AuthorId = userId;
-                    reviewViewModel.Review.CreatedDate = DateTime.Now;
-                    reviewViewModel.Review.IsActive = true;
-
-                    // imagenes de la review
-                    if (reviewViewModel.FilesReview != null)
-                    {
-                        foreach (var file in reviewViewModel.FilesReview)
+                        var productImage = new ProductImageModel
                         {
-                            string rootFolder = _hostEnvironment.WebRootPath;
-                            string fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                            string extension = Path.GetExtension(file.FileName);
-                            fileName = Guid.NewGuid() + extension;
-                            string path = Path.Combine(rootFolder + "/imagenes/reviews/", fileName);
-                            using (var fileStream = new FileStream(path, FileMode.Create))
-                            {
-                                file.CopyTo(fileStream);
-                            }
-                            reviewViewModel.ReviewImage.ReviewImageId = Guid.NewGuid();
-                            reviewViewModel.ReviewImage.ReviewId = reviewViewModel.Review.ReviewId;
-                            reviewViewModel.ReviewImage.UrlImagen = @"/imagenes/reviews/" + fileName;
-                            reviewViewModel.ReviewImage.CreatedDate = DateTime.Now;
-                            reviewViewModel.ReviewImage.IsActive = true;
-
-                            _unitOfWork.ReviewImage.Add(reviewViewModel.ReviewImage);
-                        }
+                            ProductImageId = Guid.NewGuid(),
+                            ProductId = product.ProductId,
+                            UrlImagen = "/imagenes/productos/" + fileName,
+                            CreatedDate = DateTime.Now,
+                            IsActive = true
+                        };
+                        _unitOfWork.ProductImage.Add(productImage);
                     }
-
-                    _unitOfWork.Product.Add(reviewViewModel.Product);
-                    _unitOfWork.Feature.Add(reviewViewModel.Feature);
-                    _unitOfWork.Review.Add(reviewViewModel.Review);
-                    _unitOfWork.Save();
-
-                    return RedirectToAction(nameof(Index));
                 }
+                // agregamos las imagenes a el review
+                if (reviewViewModel.ReviewImages != null)
+                {
+                    foreach (var file in reviewViewModel.ReviewImages)
+                    {
+                        string rootFolder = _hostEnvironment.WebRootPath;
+                        string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                        string extension = Path.GetExtension(file.FileName);
+                        fileName = Guid.NewGuid() + extension;
+                        string path = Path.Combine(rootFolder + "/imagenes/reviews/", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+                        var reviewImage = new ReviewImageModel
+                        {
+                            ReviewImageId = Guid.NewGuid(),
+                            ReviewId = review.ReviewId,
+                            UrlImagen = "/imagenes/reviews/" + fileName,
+                            CreatedDate = DateTime.Now,
+                            IsActive = true
+                        };
+                        _unitOfWork.ReviewImage.Add(reviewImage);
+                    }
+                }
+                _unitOfWork.Product.Add(product);
+                _unitOfWork.Feature.Add(feature);
+                _unitOfWork.Review.Add(review);
+                _unitOfWork.Save();
+                return RedirectToAction(nameof(Index));
             }
+            reviewViewModel.ListOfBrands = _unitOfWork.Brand.GetAllActiveBrands();
+            reviewViewModel.ListOfCategories = _unitOfWork.Category.GetAllActiveCategories();
             return View(reviewViewModel);
         }
         #endregion
 
         #region api
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            // SI ES ADMINISTRADOR
+            if (User.IsInRole("Admin"))
+            {
+            return Json(new
+            {
+                data = _unitOfWork.Review.GetAllActiveReviews(r => r.IsActive)
+            });
+            }
+            // SI ES AUTOR
+            var AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Json(new
+            {
+                data = _unitOfWork.Review.GetAllActiveReviews(r => r.IsActive && r.AuthorId == AuthorId)
+            });
+        }
         #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

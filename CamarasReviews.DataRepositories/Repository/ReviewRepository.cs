@@ -18,6 +18,25 @@ namespace CamarasReviews.Repository
             _db = db;
         }
 
+        public IEnumerable<ReviewDto> GetAllActiveReviews(Expression<Func<ReviewModel, bool>> condition)
+        {
+            return _db.Reviews
+                .Where(condition)
+                .Select(r => new ReviewDto
+                {
+                    ReviewId = r.ReviewId,
+                    Title = r.Title,
+                    CreatedDate = r.CreatedDate,
+                    Author = new ApplicationUser
+                    {
+                        Id = r.AuthorId,
+                        Email = r.Author.Email
+                    }.Email,
+                    IsActive = r.IsActive
+                })
+                .ToList();
+        }
+
         public void Update(ReviewModel review)
         {
             var objDesdeDb = _db.Reviews.FirstOrDefault(s => s.ReviewId == review.ReviewId);

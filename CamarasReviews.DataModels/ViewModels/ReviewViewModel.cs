@@ -10,17 +10,15 @@ namespace CamarasReviews.Models.ViewModels
 {
     public class ReviewViewModel
     {
-        public ReviewModel Review { get; set; }
         public ProductModel Product { get; set; }
-        public FeatureModel? Feature { get; set; }
-        public ProductImageModel? ProductImage { get; set; }
-        public ReviewImageModel? ReviewImage { get; set; }
-        [Display(Name = "Imagenes del Producto")]
-        public List<IFormFile>? FilesProduct { get; set; }
-        [Display(Name = "Imagenes del Review")]
-        public List<IFormFile>? FilesReview { get; set; }
-        // Propiedades para los listados
+        public FeatureModel Feature { get; set; }
+        public ReviewModel Review { get; set; }
+
         public IEnumerable<SelectListItem>? ListOfCategories { get; set; }
         public IEnumerable<SelectListItem>? ListOfBrands { get; set; }
+        [Display(Name = "Imagenes del Review")]
+        public List<IFormFile>? ReviewImages { get; set; }
+        [Display(Name = "Imagenes del Producto")]
+        public List<IFormFile>? ProductImages { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@using CamarasReviews.Helpers
 @{
-    bool isCamarasReviewsExpanded = NavigationHelper.IsExpandedActive("Author", "Reviews", "Index", ViewContext);
+    bool isCamarasReviewsExpanded = NavigationHelper.IsExpandedActive("Author", "Reviews", "Index", ViewContext) ||
+                                    NavigationHelper.IsExpandedActive("Author", "Reviews", "Create", ViewContext);
 
     bool isProductosExpanded = NavigationHelper.IsExpandedActive("Author", "Brands", "Index", ViewContext) ||
                                NavigationHelper.IsExpandedActive("Author", "Categories", "Index", ViewContext) ||
@@ -99,6 +100,9 @@
                             <nav class="sb-sidenav-menu-nested nav" aria-label="breadcrumb">
                                 <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Reviews", "Index", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Reviews" asp-action="Index">                                    
                                     Listado de Reviews
+                                </a>
+                                <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Reviews", "Create", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Reviews" asp-action="Create">
+                                    Crear Review
                                 </a>
                             </nav>
                         </div>
