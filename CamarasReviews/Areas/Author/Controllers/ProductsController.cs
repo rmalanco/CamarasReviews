@@ -258,6 +258,52 @@ namespace CamarasReviews.Areas.Author.Controllers
             _unitOfWork.Save();
             return Json(new { success = true, message = "Producto activado correctamente" });
         }
+
+        [HttpPost]
+        public IActionResult GetImagesProduct(Guid productId)
+        {
+            var objFromDb = _unitOfWork.ProductImage.GetAllActiveProductImages(p => p.ProductId == productId);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error al obtener las imagenes" });
+            }
+            return Json(new { success = true, data = objFromDb });
+        }
+        [HttpPost]
+        //UploadImagesProduct
+        public IActionResult UploadImagesProduct(Guid productId, List<IFormFile> files)
+        {
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    string rootFolder = _hostEnvironment.WebRootPath;
+                    string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                    string extension = Path.GetExtension(file.FileName);
+                    fileName = Guid.NewGuid() + extension;
+                    string path = Path.Combine(rootFolder + "/imagenes/productos/", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    var productImage = new ProductImageModel
+                    {
+                        ProductImageId = Guid.NewGuid(),
+                        ProductId = productId,
+                        UrlImagen = @"/imagenes/productos/" + fileName,
+                        CreatedDate = DateTime.Now,
+                        IsActive = true
+                    };
+                    _unitOfWork.ProductImage.Add(productImage);
+                }
+                _unitOfWork.Save();
+                return Json(new { success = true, message = "Imagenes cargadas correctamente" });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Error al cargar las imagenes" });
+            }
+        }
         #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

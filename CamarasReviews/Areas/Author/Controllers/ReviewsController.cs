@@ -51,7 +51,7 @@ namespace CamarasReviews.Areas.Author.Controllers
                 return NotFound();
             }
             var product = _unitOfWork.Product.Get(review.ProductId);
-            var feature = _unitOfWork.Feature.Get(review.ProductId);
+            var feature = _unitOfWork.Feature.GetFeatureByProductId(review.ProductId);
             ReviewViewModel reviewViewModel = new()
             {
                 Review = review,
@@ -150,6 +150,37 @@ namespace CamarasReviews.Areas.Author.Controllers
             reviewViewModel.ListOfCategories = _unitOfWork.Category.GetAllActiveCategories();
             return View(reviewViewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(ReviewViewModel reviewViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                // actualizamos el producto
+                var product = reviewViewModel.Product;
+                product.ModifiedDate = DateTime.Now;
+                _unitOfWork.Product.Update(product);
+
+                // actualizamos el review
+                var review = reviewViewModel.Review;
+                review.ModifiedDate = DateTime.Now;
+                _unitOfWork.Review.Update(review);
+
+                //buscamos el featureId
+                var featureId = _unitOfWork.Feature.GetFeatureByProductId(product.ProductId).FeatureId;
+                // actualizamos el feature
+                var feature = reviewViewModel.Feature;
+                feature.FeatureId = featureId;
+                feature.ModifiedDate = DateTime.Now;
+                _unitOfWork.Feature.Update(feature);
+
+                return RedirectToAction(nameof(Index));
+            }
+            reviewViewModel.ListOfBrands = _unitOfWork.Brand.GetAllActiveBrands();
+            reviewViewModel.ListOfCategories = _unitOfWork.Category.GetAllActiveCategories();
+            return View(reviewViewModel);
+        }
         #endregion
 
         #region api
@@ -159,10 +190,10 @@ namespace CamarasReviews.Areas.Author.Controllers
             // SI ES ADMINISTRADOR
             if (User.IsInRole("Admin"))
             {
-            return Json(new
-            {
-                data = _unitOfWork.Review.GetAllActiveReviews(r => r.IsActive)
-            });
+                return Json(new
+                {
+                    data = _unitOfWork.Review.GetAllActiveReviews(r => r.IsActive)
+                });
             }
             // SI ES AUTOR
             var AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -170,6 +201,89 @@ namespace CamarasReviews.Areas.Author.Controllers
             {
                 data = _unitOfWork.Review.GetAllActiveReviews(r => r.IsActive && r.AuthorId == AuthorId)
             });
+        }
+        [HttpPost]
+        public IActionResult GetImagesReview(Guid reviewId)
+        {
+            var objFromDb = _unitOfWork.ReviewImage.GetAllActiveReviewImages(r => r.ReviewId == reviewId);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error al obtener las imagenes" });
+            }
+            return Json(new { success = true, data = objFromDb });
+        }
+        [HttpPost]
+        public IActionResult DeleteImageReview(Guid reviewImageId)
+        {
+            var objFromDb = _unitOfWork.ReviewImage.Get(reviewImageId);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error al obtener la imagen" });
+            }
+            // eliminamos la imagen del servidor
+            string rootFolder = _hostEnvironment.WebRootPath;
+            string path = Path.Combine(rootFolder + objFromDb.UrlImagen.TrimStart('/'));
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            // eliminamos la imagen de la base de datos
+            _unitOfWork.ReviewImage.Remove(objFromDb);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Imagen eliminada correctamente" });
+        }
+        [HttpPost]
+        // DeleteImageProduct
+        public IActionResult DeleteImageProduct(Guid productImageId)
+        {
+            var objFromDb = _unitOfWork.ProductImage.Get(productImageId);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error al obtener la imagen" });
+            }
+            // eliminamos la imagen del servidor
+            string rootFolder = _hostEnvironment.WebRootPath;
+            string path = Path.Combine(rootFolder + objFromDb.UrlImagen.TrimStart('/'));
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            // eliminamos la imagen de la base de datos
+            _unitOfWork.ProductImage.Remove(objFromDb);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Imagen eliminada correctamente" });
+        }
+        [HttpPost]
+        // UploadImagesReview
+        public IActionResult UploadImagesReview(Guid reviewId, List<IFormFile> files)
+        {
+            if (files == null || files.Count == 0)
+            {
+                return Json(new { success = false, message = "Error al obtener las imagenes" });
+            }
+            foreach (var file in files)
+            {
+                string rootFolder = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                string extension = Path.GetExtension(file.FileName);
+                fileName = Guid.NewGuid() + extension;
+                string path = Path.Combine(rootFolder + "/imagenes/reviews/", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+                var reviewImage = new ReviewImageModel
+                {
+                    ReviewImageId = Guid.NewGuid(),
+                    ReviewId = reviewId,
+                    UrlImagen = "/imagenes/reviews/" + fileName,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true
+                };
+                _unitOfWork.ReviewImage.Add(reviewImage);
+            }
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Imagenes subidas correctamente" });
         }
         #endregion
 

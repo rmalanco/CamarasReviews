@@ -42,6 +42,12 @@ namespace CamarasReviews.Repository
             });
         }
 
+        public IEnumerable<ProductImageModel> GetAllActiveProductImages(Expression<Func<ProductImageModel, bool>> filter = null, Func<IQueryable<ProductImageModel>, IOrderedQueryable<ProductImageModel>> orderBy = null, string includeProperties = null)
+        {
+            IQueryable<ProductImageModel> query = _db.ProductImages.Where(s => s.IsActive);
+            return base.GetAll(filter, orderBy, includeProperties);
+        }
+
         public List<ProductImageModel> GetProductImagesByProductId(Guid productId)
         {
             return _db.ProductImages.Where(x => x.ProductId == productId && x.IsActive).ToList();

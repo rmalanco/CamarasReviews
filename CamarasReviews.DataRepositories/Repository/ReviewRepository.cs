@@ -47,7 +47,6 @@ namespace CamarasReviews.Repository
             objDesdeDb.Cons = review.Cons;
             objDesdeDb.ModifiedDate = DateTime.Now;
             objDesdeDb.IsActive = review.IsActive;
-            objDesdeDb.ProductId = review.ProductId;
             _db.SaveChanges();
         }
     }

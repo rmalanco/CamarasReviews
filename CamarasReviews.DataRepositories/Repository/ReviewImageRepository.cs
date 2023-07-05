@@ -18,6 +18,12 @@ namespace CamarasReviews.Repository
             _db = db;
         }
 
+        public IEnumerable<ReviewImageModel> GetAllActiveReviewImages(Expression<Func<ReviewImageModel, bool>> filter = null, Func<IQueryable<ReviewImageModel>, IOrderedQueryable<ReviewImageModel>> orderBy = null, string includeProperties = null)
+        {
+            IQueryable<ReviewImageModel> query = _db.ReviewImages.Where(s => s.IsActive);
+            return base.GetAll(filter, orderBy, includeProperties);
+        }
+
         public void Update(ReviewImageModel reviewImageModel)
         {
             var objFromDb = _db.ReviewImages.FirstOrDefault(s => s.ReviewImageId == reviewImageModel.ReviewImageId);
