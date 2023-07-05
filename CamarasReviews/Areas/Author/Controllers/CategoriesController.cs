@@ -28,10 +28,10 @@ namespace CamarasReviews.Areas.Author.Controllers
         }
         #endregion
 
-        #region M�todos de la pagina
+        #region Métodos de la pagina
         #endregion
 
-        #region M�todos de la API
+        #region Métodos de la API
         private IActionResult CreateAndUpdateCategory(CategoryModel category)
         {
             if (ModelState.IsValid)
@@ -67,7 +67,7 @@ namespace CamarasReviews.Areas.Author.Controllers
         {
             return CreateAndUpdateCategory(category);
         }
-        // PUT - Editar una marca, override del m�todo Upsert
+        // PUT - Editar una marca, override del método Upsert
         [HttpPut]
         public IActionResult Update(CategoryModel category)
         {

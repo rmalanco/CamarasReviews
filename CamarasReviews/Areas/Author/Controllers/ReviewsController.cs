@@ -285,6 +285,19 @@ namespace CamarasReviews.Areas.Author.Controllers
             _unitOfWork.Save();
             return Json(new { success = true, message = "Imagenes subidas correctamente" });
         }
+        [HttpDelete]
+        public IActionResult Delete(Guid id)
+        {
+            var objFromDb = _unitOfWork.Review.Get(id);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error al eliminar la review" });
+            }
+            objFromDb.IsActive = false;
+            _unitOfWork.Review.Update(objFromDb);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Review eliminada correctamente" });
+        }
         #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

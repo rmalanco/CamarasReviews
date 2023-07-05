@@ -1,101 +1,33 @@
-﻿@{
+﻿@model CamarasReviews.Models.ViewModels.HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
+<h1>Bienvenido a nuestra página de reseñas de cámaras</h1>
 
 <div class="row">
-            <div class="col-12  mb-5 mb-lg-0">
-               <article class="row mb-5">
-                  <div class="col-12">
-                     <div class="post-slider">
-                        <img loading="lazy" src="images/post/post-6.jpg" class="img-fluid" alt="post-thumb">
-                        <img loading="lazy" src="images/post/post-1.jpg" class="img-fluid" alt="post-thumb">
-                        <img loading="lazy" src="images/post/post-3.jpg" class="img-fluid" alt="post-thumb">
-                     </div>
-                  </div>
-               </article>
+   <div class="col-12  mb-5 mb-lg-0">
+      <article class="row mb-5">
+         <div class="col-12">
+            <div class="post-slider">
+               @if (Model.ListOfReviews != null && Model.ListOfReviews.Any())
+               {
+                  @foreach (var item in Model.ListOfReviews)
+                  {
+                     <img loading="lazy" src="@item.Text" class="img-fluid" alt="image" style="height:450px; object-fit: cover;" />
+                  }
+               }
+               else
+               {
+                  <img loading="lazy" src="~/imagenes/reviews/default.png" class="img-fluid" alt="image" style="height:450px; object-fit: cover;" />
+               }
             </div>
-            <div class="col-lg-8  mb-5 mb-lg-0">
-               <!-- Contenedor Post -->
-               <article class="row mb-5">
-                  <div class="col-md-4 mb-4 mb-md-0">
-                     <div class="post-slider slider-sm">
-                        <img loading="lazy" src="images/post/post-6.jpg" class="img-fluid" alt="post-thumb"
-                           style="height:200px; object-fit: cover;">
-                        <img loading="lazy" src="images/post/post-1.jpg" class="img-fluid" alt="post-thumb"
-                           style="height:200px; object-fit: cover;">
-                        <img loading="lazy" src="images/post/post-3.jpg" class="img-fluid" alt="post-thumb"
-                           style="height:200px; object-fit: cover;">
-                     </div>
-                  </div>
-                  <div class="col-md-8">
-                     <h3 class="h5"><a class="post-title" href="post-elements.html">Elements That You Can Use To Create
-                           A New
-                           Post On This Template.</a></h3>
-                     <ul class="list-inline post-meta mb-2">
-                        <li class="list-inline-item"><i class="ti-user mr-2"></i><a href="author.html">John Doe</a>
-                        </li>
-                        <li class="list-inline-item">Date : March 15, 2020</li>
-                        <li class="list-inline-item">Categories : <a href="#!" class="ml-1">Photography </a>
-                        </li>
-                        <li class="list-inline-item">Tags : <a href="#!" class="ml-1">Photo </a> ,<a href="#!"
-                              class="ml-1">Image </a>
-                        </li>
-                     </ul>
-                     <p>Heading example Here is example of hedings. You can use this heading by following markdownify
-                        rules. …</p> <a href="post-elements.html" class="btn btn-outline-primary">Continue Reading</a>
-                  </div>
-               </article>
-            </div>
-            <aside class="col-lg-4">
-               <!-- Búsqueda -->
-               <div class="widget">
-                  <h5 class="widget-title"><span>Búsqueda</span></h5>
-                  <form action="/logbook-hugo/search" class="widget-search">
-                     <input id="search-query" name="search" type="search" placeholder="Buscar..." class="form-control">
-                     <button type="submit"><i class="ti-search"></i>
-                     </button>
-                  </form>
-               </div>
-               <!-- categories -->
-               <div class="widget">
-                  <h5 class="widget-title"><span>Categorías</span></h5>
-                  <ul class="list-unstyled widget-list">
-                     <li><a href="#!" class="d-flex">Cámaras
-                           <small class="ml-auto">Artículos (10)</small></a>
-                     </li>
-                  </ul>
-               </div>
-               <!-- tags / etiquetas para las cámaras-->
-               <div class="widget">
-                  <h5 class="widget-title"><span>Tags</span></h5>
-                  <ul class="list-inline widget-list-inline">
-                     <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Cámaras</a>
-                     </li>
-                     <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Fotografía</a>
-                     </li>
-                     <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Cine</a>
-                     </li>
-                     <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Video</a>
-                     </li>
-                  </ul>
-               </div>
-               <!-- latest post -->
-               <div class="widget">
-                  <h5 class="widget-title"><span>Últimos Artículos</span></h5>
-                  <!-- post-item -->
-                  <ul class="list-unstyled widget-list">
-                     <li class="media widget-post align-items-center">
-                        <a href="post-elements.html">
-                           <img loading="lazy" class="mr-3" src="images/post/post-6.jpg">
-                        </a>
-                        <div class="media-body">
-                           <h5 class="h6 mb-0">
-                              <a href="post-elements.html">Camara Sony Alpha 7</a>
-                           </h5>
-                           <small>Enero 12, 2023</small>
-                        </div>
-                     </li>
-                  </ul>
-               </div>
-            </aside>
          </div>
+      </article>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-12">
+      <p>En nuestra página de reseñas de cámaras, encontrarás análisis detallados, opiniones imparciales y recomendaciones sobre una amplia variedad de cámaras. Ya sea que busques una cámara réflex digital, una cámara sin espejo o una cámara de acción, estamos aquí para ayudarte a tomar la mejor decisión de compra. Explora nuestras reseñas y descubre la cámara perfecta para capturar tus momentos especiales.</p>
+   </div>
+</div>

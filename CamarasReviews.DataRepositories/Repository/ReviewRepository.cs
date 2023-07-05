@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CamarasReviews.Data;
 using CamarasReviews.Models;
 using CamarasReviews.Repository.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CamarasReviews.Repository
 {
@@ -35,6 +36,45 @@ namespace CamarasReviews.Repository
                     IsActive = r.IsActive
                 })
                 .ToList();
+        }
+
+        public IEnumerable<ReviewModel> GetAllActiveReviewsForList(Expression<Func<ReviewModel, bool>> condition)
+        {
+            return _db.Reviews
+                .Where(condition)
+                .ToList();
+        }
+
+        public IEnumerable<ReviewModel> GetTop5Reviews()
+        {
+            return _db.Reviews
+                .Where(r => r.IsActive)
+                .OrderByDescending(r => r.CreatedDate)
+                .Take(5)
+                .ToList();
+        }
+
+        public IEnumerable<SelectListItem> GetTop5ReviewsAndImage()
+        {
+            var reviewImage = _db.ReviewImages
+                .Join(_db.Reviews.Where(r => r.IsActive),  // Filtrar solo las revisiones activas
+                    ri => ri.ReviewId,
+                    r => r.ReviewId,
+                    (ri, _) => new
+                    {
+                        ri.ReviewId,
+                        ri.UrlImagen
+                    })
+                .GroupBy(ri => ri.ReviewId)  // Agrupar por ReviewId
+                .Select(g => g.First())  // Seleccionar la primera imagen de cada grupo
+                .ToList();
+
+            // mapeo de la lista de reviews a una lista de SelectListItem
+            return reviewImage.Select(r => new SelectListItem
+            {
+                Text = r.UrlImagen,
+                Value = r.ReviewId.ToString()
+            });
         }
 
         public void Update(ReviewModel review)
