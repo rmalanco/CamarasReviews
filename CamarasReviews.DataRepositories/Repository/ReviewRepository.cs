@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CamarasReviews.Data;
 using CamarasReviews.Models;
+using CamarasReviews.Models.ViewModels;
 using CamarasReviews.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -38,12 +39,43 @@ namespace CamarasReviews.Repository
                 .ToList();
         }
 
-        public IEnumerable<ReviewModel> GetAllActiveReviewsForList(Expression<Func<ReviewModel, bool>> condition)
+        public IEnumerable<ReviewViewModel> GetAllActiveReviewsForList()
         {
             return _db.Reviews
-                .Where(condition)
+                .Where(r => r.IsActive)
+                .Select(r => new ReviewViewModel
+                {
+                    Review = new ReviewModel
+                    {
+                        ReviewId = r.ReviewId,
+                        Title = r.Title,
+                        ShortDescription = r.ShortDescription,
+                        CreatedDate = r.CreatedDate,
+                        Author = new ApplicationUser
+                        {
+                            Id = r.AuthorId,
+                            Name = r.Author.FullName
+                        },
+                        IsActive = r.IsActive,
+                        ReviewImages = r.ReviewImages.Select(ri => new ReviewImageModel
+                        {
+                            ReviewImageId = ri.ReviewImageId,
+                            UrlImagen = ri.UrlImagen
+                        }).ToList()
+                    },
+                    Product = new ProductModel
+                    {
+                        Category = new CategoryModel
+                        {
+                            CategoryId = r.Product.Category.CategoryId,
+                            Name = r.Product.Category.Name
+                        }
+                    }
+                })
+                .OrderByDescending(r => r.Review.CreatedDate)
                 .ToList();
         }
+
 
         public IEnumerable<ReviewModel> GetTop5Reviews()
         {

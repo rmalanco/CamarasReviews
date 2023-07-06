@@ -11,7 +11,7 @@ namespace CamarasReviews.Models.ViewModels
         public ReviewModel Review { get; set; }
         public ProductModel Product { get; set; }
         public FeatureModel Feature { get; set; }
-        public IEnumerable<ReviewModel>? ReviewList { get; set; }
+        public IEnumerable<ReviewViewModel>? ReviewList { get; set; }
         public IEnumerable<ReviewModel>? LastReviews { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
     }
