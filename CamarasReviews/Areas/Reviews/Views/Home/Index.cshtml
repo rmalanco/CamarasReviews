@@ -56,9 +56,9 @@
             {
                @foreach (var item in Model.Categories)
                {
-                  <li><a href="/@item.Name
-                     " class="d-flex">@item.Name
-                        @* <small class="ml-auto">Artículos (@item.Reviews.Count())</small></a> *@
+                  <li>
+                     <a href="/Reviews/Buscar/@item.Name" class="d-flex">@item.Name
+                     </a>
                   </li>
                }
             }

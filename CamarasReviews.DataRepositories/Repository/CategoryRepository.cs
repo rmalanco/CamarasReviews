@@ -52,9 +52,7 @@ namespace CamarasReviews.Repository
 
         public IEnumerable<CategoryModel> GetAllActiveCategoriesForList(Expression<Func<CategoryModel, bool>> condition)
         {
-            return _db.Categories
-                .Where(condition)
-                .ToList();
+            return _db.Categories.Where(s => s.IsActive).Where(condition).ToList();
         }
 
         public IEnumerable<SelectListItem> GetAllCategories()
