@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CamarasReviews.Data;
 using CamarasReviews.Models;
+using CamarasReviews.Models.ViewModels;
 using CamarasReviews.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -43,16 +44,28 @@ namespace CamarasReviews.Repository
 
         public IEnumerable<SelectListItem> GetAllActiveCategories()
         {
-            return _db.Categories.Where(s => s.IsActive == true).Select(i => new SelectListItem()
+            return _db.Categories.Where(s => s.IsActive).Select(i => new SelectListItem()
             {
                 Text = i.Name,
                 Value = i.CategoryId.ToString()
             });
         }
 
-        public IEnumerable<CategoryModel> GetAllActiveCategoriesForList(Expression<Func<CategoryModel, bool>> condition)
+        public IEnumerable<CategoryViewModel> GetAllActiveCategoriesForList(Expression<Func<CategoryModel, bool>> condition)
         {
-            return _db.Categories.Where(s => s.IsActive).Where(condition).ToList();
+            return _db.Categories
+            .Where(s => s.IsActive)
+            .Where(condition)
+            .GroupJoin(_db.Products.Where(p => p.IsActive),
+                category => category.CategoryId,
+                product => product.CategoryId,
+                (category, products) => new CategoryViewModel
+                {
+                    CategoryId = category.CategoryId,
+                    Name = category.Name,
+                    ProductCount = products.Count()
+                })
+            .ToList();
         }
 
         public IEnumerable<SelectListItem> GetAllCategories()
@@ -66,7 +79,7 @@ namespace CamarasReviews.Repository
 
         public IEnumerable<SelectListItem> GetAllInactiveCategories()
         {
-            return _db.Categories.Where(s => s.IsActive == false).Select(i => new SelectListItem()
+            return _db.Categories.Where(s => !s.IsActive).Select(i => new SelectListItem()
             {
                 Text = i.Name,
                 Value = i.CategoryId.ToString()

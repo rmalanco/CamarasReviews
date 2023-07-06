@@ -13,6 +13,6 @@ namespace CamarasReviews.Models.ViewModels
         public FeatureModel Feature { get; set; }
         public IEnumerable<ReviewModel>? ReviewList { get; set; }
         public IEnumerable<ReviewModel>? LastReviews { get; set; }
-        public List<CategoryModel> Categories { get; set; }
+        public List<CategoryViewModel> Categories { get; set; }
     }
 }

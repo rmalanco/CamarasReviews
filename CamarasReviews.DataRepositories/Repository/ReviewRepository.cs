@@ -49,31 +49,33 @@ namespace CamarasReviews.Repository
         {
             return _db.Reviews
             .Join(_db.ReviewImages.Where(ri => ri.IsActive),
-                r => r.ReviewId,
-                ri => ri.ReviewId,
-                (r, ri) => new ReviewModel
+            r => r.ReviewId,
+            ri => ri.ReviewId,
+            (r, ri) => new { Review = r, ReviewImage = ri })
+            .GroupBy(joined => joined.Review)
+            .Select(group => new ReviewModel
+            {
+                ReviewId = group.Key.ReviewId,
+                Title = group.Key.Title,
+                ShortDescription = group.Key.ShortDescription,
+                LongDescription = group.Key.LongDescription,
+                Pros = group.Key.Pros,
+                Cons = group.Key.Cons,
+                CreatedDate = group.Key.CreatedDate,
+                ModifiedDate = group.Key.ModifiedDate,
+                IsActive = group.Key.IsActive,
+                AuthorId = group.Key.AuthorId,
+                ReviewImages = new List<ReviewImageModel>
                 {
-                    ReviewId = r.ReviewId,
-                    Title = r.Title,
-                    ShortDescription = r.ShortDescription,
-                    LongDescription = r.LongDescription,
-                    Pros = r.Pros,
-                    Cons = r.Cons,
-                    CreatedDate = r.CreatedDate,
-                    ModifiedDate = r.ModifiedDate,
-                    IsActive = r.IsActive,
-                    AuthorId = r.AuthorId,
-                    ReviewImages = new List<ReviewImageModel>
+                    new ReviewImageModel
                     {
-                        new ReviewImageModel
-                        {
-                            ReviewImageId = ri.ReviewImageId,
-                            ReviewId = ri.ReviewId,
-                            UrlImagen = ri.UrlImagen,
-                            IsActive = ri.IsActive
-                        }
+                        ReviewImageId = group.Select(j => j.ReviewImage.ReviewImageId).FirstOrDefault(),
+                        ReviewId = group.Key.ReviewId,
+                        UrlImagen = group.Select(j => j.ReviewImage.UrlImagen).FirstOrDefault(),
+                        IsActive = group.Select(j => j.ReviewImage.IsActive).FirstOrDefault()
                     }
-                })
+                }
+            })
             .OrderByDescending(r => r.CreatedDate)
             .Take(5)
             .ToList();
