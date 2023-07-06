@@ -24,14 +24,14 @@ namespace CamarasReviews.Areas.Reviews.Controllers
         #region Vistas de la sección Reviews
         public IActionResult Index()
         {
-            ReviewViewModel reviewViewModel = new()
+            PostViewModel postViewModel = new()
             {
                 Review = new ReviewModel(),
                 ReviewList = _unitOfWork.Review.GetAllActiveReviewsForList(r => r.IsActive),
-                ListOfCategories = _unitOfWork.Category.GetAllActiveCategories(),
+                Categories = _unitOfWork.Category.GetAllActiveCategoriesForList(c => c.IsActive).ToList(),
                 LastReviews = _unitOfWork.Review.GetTop5Reviews()
             };
-            return View(reviewViewModel);
+            return View(postViewModel);
         }
         #endregion
 

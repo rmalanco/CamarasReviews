@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CamarasReviews.Models.ViewModels.PostViewModel
+@{
     ViewData["Title"] = "Reseñas de cámaras";
 }
 <div class="row">
@@ -48,41 +49,46 @@
       <div class="widget">
          <h5 class="widget-title"><span>Categorías</span></h5>
          <ul class="list-unstyled widget-list">
-            <li><a href="#!" class="d-flex">Cámaras
+            @* <li><a href="#!" class="d-flex">Cámaras
                   <small class="ml-auto">Artículos (10)</small></a>
-            </li>
+            </li> *@
+            @if (Model.Categories != null && Model.Categories.Any())
+            {
+               @foreach (var item in Model.Categories)
+               {
+                  <li><a href="/@item.Name
+                     " class="d-flex">@item.Name
+                        @* <small class="ml-auto">Artículos (@item.Reviews.Count())</small></a> *@
+                  </li>
+               }
+            }
          </ul>
       </div>
-      <!-- tags / etiquetas para las cámaras-->
-      @* <div class="widget">
-         <h5 class="widget-title"><span>Tags</span></h5>
-         <ul class="list-inline widget-list-inline">
-            <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Cámaras</a>
-            </li>
-            <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Fotografía</a>
-            </li>
-            <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Cine</a>
-            </li>
-            <li class="list-inline-item"><a href="#!" class="btn btn-outline-primary btn-sm">Video</a>
-            </li>
-         </ul>
-      </div> *@
       <!-- latest post -->
       <div class="widget">
          <h5 class="widget-title"><span>Últimos Artículos</span></h5>
          <!-- post-item -->
          <ul class="list-unstyled widget-list">
-            <li class="media widget-post align-items-center">
-               <a href="post-elements.html">
-                  <img loading="lazy" class="mr-3" src="images/post/post-6.jpg">
-               </a>
-               <div class="media-body">
-                  <h5 class="h6 mb-0">
-                     <a href="post-elements.html">Camara Sony Alpha 7</a>
-                  </h5>
-                  <small>Enero 12, 2023</small>
-               </div>
-            </li>
+            @if (Model.LastReviews != null && Model.LastReviews.Any())
+            {
+               @foreach (var item in Model.LastReviews)
+               {
+                  <li class="media widget-post align-items-center">
+                     <a href="/Reviews/Details/@item.ReviewId">
+                        @foreach (var imagen in item.ReviewImages)
+                        {
+                           <img loading="lazy" class="mr-3" src="@imagen.UrlImagen" alt="post-thumb">
+                        }
+                     </a>
+                     <div class="media-body">
+                        <h5 class="h6 mb-0">
+                           <a href="/Reviews/Details/@item.ReviewId">@item.Title</a>
+                        </h5>
+                        <small>@item.CreatedDate.ToString("MMMM dd, yyyy")</small>
+                     </div>
+                  </li>
+               }
+            }
          </ul>
       </div>
    </aside>

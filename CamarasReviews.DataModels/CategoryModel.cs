@@ -21,4 +21,5 @@ public class CategoryModel // seria cambiar el nombre por CategoryModel
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
     public bool IsActive { get; set; } = true;
+    public List<ReviewModel>? Reviews { get; set; }
 }

@@ -24,7 +24,5 @@ namespace CamarasReviews.Models.ViewModels
         public bool? IsReview { get; set; }
         // para las imagenes del review o del producto
         public List<IFormFile>? Images { get; set; }
-        public IEnumerable<ReviewModel>? ReviewList { get; set; }
-        public IEnumerable<ReviewModel>? LastReviews { get; set; }
     }
 }

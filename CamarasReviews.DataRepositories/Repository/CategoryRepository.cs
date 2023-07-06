@@ -50,6 +50,13 @@ namespace CamarasReviews.Repository
             });
         }
 
+        public IEnumerable<CategoryModel> GetAllActiveCategoriesForList(Expression<Func<CategoryModel, bool>> condition)
+        {
+            return _db.Categories
+                .Where(condition)
+                .ToList();
+        }
+
         public IEnumerable<SelectListItem> GetAllCategories()
         {
             return _db.Categories.Select(i => new SelectListItem()

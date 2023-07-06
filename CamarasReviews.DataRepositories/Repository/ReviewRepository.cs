@@ -48,10 +48,35 @@ namespace CamarasReviews.Repository
         public IEnumerable<ReviewModel> GetTop5Reviews()
         {
             return _db.Reviews
-                .Where(r => r.IsActive)
-                .OrderByDescending(r => r.CreatedDate)
-                .Take(5)
-                .ToList();
+            .Join(_db.ReviewImages.Where(ri => ri.IsActive),
+                r => r.ReviewId,
+                ri => ri.ReviewId,
+                (r, ri) => new ReviewModel
+                {
+                    ReviewId = r.ReviewId,
+                    Title = r.Title,
+                    ShortDescription = r.ShortDescription,
+                    LongDescription = r.LongDescription,
+                    Pros = r.Pros,
+                    Cons = r.Cons,
+                    CreatedDate = r.CreatedDate,
+                    ModifiedDate = r.ModifiedDate,
+                    IsActive = r.IsActive,
+                    AuthorId = r.AuthorId,
+                    ReviewImages = new List<ReviewImageModel>
+                    {
+                        new ReviewImageModel
+                        {
+                            ReviewImageId = ri.ReviewImageId,
+                            ReviewId = ri.ReviewId,
+                            UrlImagen = ri.UrlImagen,
+                            IsActive = ri.IsActive
+                        }
+                    }
+                })
+            .OrderByDescending(r => r.CreatedDate)
+            .Take(5)
+            .ToList();
         }
 
         public IEnumerable<SelectListItem> GetTop5ReviewsAndImage()

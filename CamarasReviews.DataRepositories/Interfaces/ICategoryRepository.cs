@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CamarasReviews.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,5 +21,6 @@ namespace CamarasReviews.Repository.Interfaces
         IEnumerable<SelectListItem> GetAllActiveCategories();
         // obtener todas las marcas desactivadas
         IEnumerable<SelectListItem> GetAllInactiveCategories();
+        IEnumerable<CategoryModel> GetAllActiveCategoriesForList(Expression<Func<CategoryModel, bool>> condition);
     }
 }
