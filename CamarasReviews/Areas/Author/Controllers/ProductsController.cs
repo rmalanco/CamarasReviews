@@ -1,11 +1,14 @@
 ﻿using CamarasReviews.Models;
 using CamarasReviews.Models.ViewModels;
 using CamarasReviews.Repository.Interfaces;
+using CamarasReviews.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace CamarasReviews.Areas.Author.Controllers
 {
+    [Authorize(Roles = RoleConstants.AdminRole)]
     [Area("Author")]
     public class ProductsController : Controller
     {

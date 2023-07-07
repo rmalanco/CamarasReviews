@@ -38,4 +38,5 @@ public class ProductModel
     public DateTime? DeletedDate { get; set; }
     [Display(Name = "Activo")]
     public bool IsActive { get; set; } = true;
+    public ICollection<ProductImageModel>? ProductImages { get; set; }
 }

@@ -1,11 +1,11 @@
 ﻿@using CamarasReviews.Helpers
 @{
     bool isCamarasReviewsExpanded = NavigationHelper.IsExpandedActive("Author", "Reviews", "Index", ViewContext) ||
-                                    NavigationHelper.IsExpandedActive("Author", "Reviews", "Create", ViewContext);
+    NavigationHelper.IsExpandedActive("Author", "Reviews", "Create", ViewContext);
 
     bool isProductosExpanded = NavigationHelper.IsExpandedActive("Author", "Brands", "Index", ViewContext) ||
-                               NavigationHelper.IsExpandedActive("Author", "Categories", "Index", ViewContext) ||
-                               NavigationHelper.IsExpandedActive("Author", "Products", "Index", ViewContext);
+    NavigationHelper.IsExpandedActive("Author", "Categories", "Index", ViewContext) ||
+    NavigationHelper.IsExpandedActive("Author", "Products", "Index", ViewContext);
 
     bool isAdministrationExpanded = NavigationHelper.IsExpandedActive("Admin", "Usuarios", "Index", ViewContext);
 }
@@ -21,7 +21,8 @@
     <title>@ViewData["Title"] - Cámaras Reviews</title>
     <link href="~/admin/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
@@ -48,19 +49,19 @@
         <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                   aria-expanded="false">
+                    aria-expanded="false">
                     <i class="fas fa-user fa-fw"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-label="menú desplegable">
                     <li>
-                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Manage Account</a>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Mi perfil</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
                     <li>
-                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
-                              asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" method="post"
+                            asp-route-returnUrl="/">
                             <button type="submit" class="dropdown-item">Cerrar sesión</button>
                         </form>
                     </li>
@@ -75,7 +76,8 @@
                     <div class="nav">
                         @if (User.IsInRole("Admin"))
                         {
-                            <a class="nav-link @(NavigationHelper.IsNavActive("Admin", "Home", "Index", ViewContext) ? "active" : "")" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link @(NavigationHelper.IsNavActive("Admin", "Home", "Index", ViewContext) ? "active" : "")"
+                                asp-area="Admin" asp-controller="Home" asp-action="Index">
                                 <div class="sb-nav-link-icon">
                                     <i class="fas fa-tachometer-alt"></i>
                                 </div>
@@ -84,15 +86,18 @@
                         }
                         @if (User.IsInRole("Author"))
                         {
-                            <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Home", "Index", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Home", "Index", ViewContext) ? "active" : "")"
+                                asp-area="Author" asp-controller="Home" asp-action="Index">
                                 <div class="sb-nav-link-icon">
                                     <i class="fas fa-tachometer-alt"></i>
                                 </div>
                                 Dashboard
                             </a>
                         }
-                        <a class="nav-link @(isCamarasReviewsExpanded ? "" : "collapsed")" href="#" data-bs-toggle="collapse"
-                           data-bs-target="#collapseCamarasReviews" aria-expanded="@(isCamarasReviewsExpanded.ToString().ToLower())" aria-controls="collapseLayouts">
+                        <a class="nav-link @(isCamarasReviewsExpanded ? "" : "collapsed")" href="#"
+                            data-bs-toggle="collapse" data-bs-target="#collapseCamarasReviews"
+                            aria-expanded="@(isCamarasReviewsExpanded.ToString().ToLower())"
+                            aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-list"></i>
                             </div>
@@ -101,20 +106,24 @@
                                 <i class="fas fa-angle-down"></i>
                             </div>
                         </a>
-                        <div class="@(isCamarasReviewsExpanded ? "collapse show" : "collapse")" id="collapseCamarasReviews" aria-labelledby="headingOne">
+                        <div class="@(isCamarasReviewsExpanded ? "collapse show" : "collapse")"
+                            id="collapseCamarasReviews" aria-labelledby="headingOne">
                             <nav class="sb-sidenav-menu-nested nav" aria-label="breadcrumb">
-                                <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Reviews", "Index", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Reviews" asp-action="Index">                                    
+                                <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Reviews", "Index", ViewContext) ? "active" : "")"
+                                    asp-area="Author" asp-controller="Reviews" asp-action="Index">
                                     Listado de Reviews
                                 </a>
-                                <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Reviews", "Create", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Reviews" asp-action="Create">
+                                <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Reviews", "Create", ViewContext) ? "active" : "")"
+                                    asp-area="Author" asp-controller="Reviews" asp-action="Create">
                                     Crear Review
                                 </a>
                             </nav>
-                        </div>                        
+                        </div>
                         @if (User.IsInRole("Admin"))
                         {
                             <a class="nav-link @(isProductosExpanded ? "" : "collapsed")" href="#" data-bs-toggle="collapse"
-                               data-bs-target="#collapseProductos" aria-expanded="@(isProductosExpanded.ToString().ToLower())" aria-controls="collapseLayouts">
+                                data-bs-target="#collapseProductos"
+                                aria-expanded="@(isProductosExpanded.ToString().ToLower())" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon">
                                     <i class="fas fa-list"></i>
                                 </div>
@@ -123,15 +132,23 @@
                                     <i class="fas fa-angle-down"></i>
                                 </div>
                             </a>
-                            <div class="@(isProductosExpanded ? "collapse show" : "collapse")" id="collapseProductos" aria-labelledby="headingOne">
+                            <div class="@(isProductosExpanded ? "collapse show" : "collapse")" id="collapseProductos"
+                                aria-labelledby="headingOne">
                                 <nav class="sb-sidenav-menu-nested nav" aria-label="breadcrumb">
-                                    <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Brands", "Index", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Brands" asp-action="Index">Listado de Marcas</a>
-                                    <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Categories", "Index", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Categories" asp-action="Index">Listado de Categorías</a>
-                                    @* <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Products", "Index", ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Products" asp-action="Index">Listado de Productos</a> *@
+                                    <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Brands", "Index", ViewContext) ? "active" : "")"
+                                        asp-area="Author" asp-controller="Brands" asp-action="Index">Listado de Marcas</a>
+                                    <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Categories", "Index", ViewContext) ? "active" : "")"
+                                        asp-area="Author" asp-controller="Categories" asp-action="Index">Listado de
+                                        Categorías</a>
+                                    @* <a class="nav-link @(NavigationHelper.IsNavActive("Author", "Products", "Index",
+                                ViewContext) ? "active" : "")" asp-area="Author" asp-controller="Products"
+                                asp-action="Index">Listado de Productos</a> *@
                                 </nav>
                             </div>
-                            <a class="nav-link @(isAdministrationExpanded ? "" : "collapsed")" href="#" data-bs-toggle="collapse"
-                               data-bs-target="#collapseAdmin" aria-expanded="@(isAdministrationExpanded.ToString().ToLower())" aria-controls="collapseLayouts">
+                            <a class="nav-link @(isAdministrationExpanded ? "" : "collapsed")" href="#"
+                                data-bs-toggle="collapse" data-bs-target="#collapseAdmin"
+                                aria-expanded="@(isAdministrationExpanded.ToString().ToLower())"
+                                aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon">
                                     <i class="fas fa-list"></i>
                                 </div>
@@ -140,9 +157,12 @@
                                     <i class="fas fa-angle-down"></i>
                                 </div>
                             </a>
-                            <div class="@(isAdministrationExpanded ? "collapse show" : "collapse")" id="collapseAdmin" aria-labelledby="headingOne">
+                            <div class="@(isAdministrationExpanded ? "collapse show" : "collapse")" id="collapseAdmin"
+                                aria-labelledby="headingOne">
                                 <nav class="sb-sidenav-menu-nested nav" aria-label="breadcrumb">
-                                    <a class="nav-link @(NavigationHelper.IsNavActive("Admin", "Usuarios", "Index", ViewContext) ? "active" : "")" asp-area="Admin" asp-controller="Usuarios" asp-action="Index">Listado de Usuarios</a>
+                                    <a class="nav-link @(NavigationHelper.IsNavActive("Admin", "Usuarios", "Index", ViewContext) ? "active" : "")"
+                                        asp-area="Admin" asp-controller="Usuarios" asp-action="Index">Listado de
+                                        Usuarios</a>
                                 </nav>
                             </div>
                         }
@@ -179,10 +199,11 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
     <script src="~/admin/js/scripts.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

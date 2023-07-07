@@ -13,7 +13,6 @@ namespace CamarasReviews.Models.ViewModels
         public ProductModel Product { get; set; }
         public FeatureModel Feature { get; set; }
         public ReviewModel Review { get; set; }
-
         public IEnumerable<SelectListItem>? ListOfCategories { get; set; }
         public IEnumerable<SelectListItem>? ListOfBrands { get; set; }
         [Display(Name = "Imagenes del Review")]
@@ -24,5 +23,7 @@ namespace CamarasReviews.Models.ViewModels
         public bool? IsReview { get; set; }
         // para las imagenes del review o del producto
         public List<IFormFile>? Images { get; set; }
+        public string? UserId { get; set; }
+        public string? UserName { get; set; }
     }
 }

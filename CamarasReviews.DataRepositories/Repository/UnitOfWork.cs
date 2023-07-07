@@ -13,6 +13,8 @@ public class UnitOfWork : IUnitOfWork
     public IProductRepository Product { get; private set; }
     public IProductImageRepository ProductImage { get; private set; }
     public IReviewImageRepository ReviewImage { get; private set; }
+    public IApplicationUserRepository ApplicationUser { get; private set; }
+    public ICommentRepository Comment { get; private set; }
 
     public UnitOfWork(ApplicationDbContext db)
     {
@@ -24,6 +26,8 @@ public class UnitOfWork : IUnitOfWork
         Product = new ProductRepository(_db);
         ProductImage = new ProductImageRepository(_db);
         ReviewImage = new ReviewImageRepository(_db);
+        ApplicationUser = new ApplicationUserRepository(_db);
+        Comment = new CommentRepository(_db);
     }
 
     public void Save()

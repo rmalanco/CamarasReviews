@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <h3 class="h5"><a class="post-title" href="/Reviews/Details/@item.Review.ReviewId">@item.Review.Title</a></h3>
+                        <h3 class="h5"><a class="post-title" href="/Reviews/Details?Id=@item.Review.ReviewId">@item.Review.Title</a></h3>
                         <ul class="list-inline post-meta mb-2">
                             <li class="list-inline-item">
                                 <i class="ti-user mr-2"></i><a href="/Reviews/ReviewsByAuthor/@item.Review.Author.Id">@item.Review.Author.Name</a>
@@ -33,7 +33,7 @@
                             </li>
                         </ul>
                         <p>@item.Review.ShortDescription</p>
-                        <a href="/Reviews/Details/@item.Review.ReviewId" class="btn btn-outline-primary">Continuar Leyendo</a>
+                        <a href="/Reviews/Details?Id=@item.Review.ReviewId" class="btn btn-outline-primary">Continuar Leyendo</a>
                     </div>
                 }
                 <div class="pagination">
@@ -99,7 +99,7 @@
                     @foreach (var item in Model.LastReviews)
                     {
                         <li class="media widget-post align-items-center">
-                            <a href="/Reviews/Details/@item.ReviewId">
+                            <a href="/Reviews/Details?Id=@item.ReviewId">
                                 @foreach (var imagen in item.ReviewImages)
                                 {
                                     <img loading="lazy" class="mr-3" src="@imagen.UrlImagen" alt="post-thumb">
@@ -107,7 +107,7 @@
                             </a>
                             <div class="media-body">
                                 <h5 class="h6 mb-0">
-                                    <a href="/Reviews/Details/@item.ReviewId">@item.Title</a>
+                                    <a href="/Reviews/Details?Id=@item.ReviewId">@item.Title</a>
                                 </h5>
                                 <small>@item.CreatedDate.ToString("MMMM dd, yyyy")</small>
                             </div>

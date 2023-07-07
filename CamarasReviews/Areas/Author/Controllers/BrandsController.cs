@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using CamarasReviews.Models;
 using CamarasReviews.Models.ViewModels;
 using CamarasReviews.Repository.Interfaces;
+using CamarasReviews.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace CamarasReviews.Areas.Author.Controllers
 {
+    // admin role y author role
+    [Authorize(Roles = RoleConstants.AdminRole)]
     [Area("Author")]
     public class BrandsController : Controller
     {

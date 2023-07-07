@@ -9,5 +9,7 @@ public interface IUnitOfWork : IDisposable
     IProductRepository Product { get; }
     IProductImageRepository ProductImage { get; }
     IReviewImageRepository ReviewImage { get; }
+    IApplicationUserRepository ApplicationUser { get; }
+    ICommentRepository Comment { get; }
     void Save();
 }

@@ -1,9 +1,12 @@
 ﻿using CamarasReviews.Models;
+using CamarasReviews.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace CamarasReviews.Areas.Author.Controllers
 {
+    [Authorize(Roles = RoleConstants.AuthorRole)]
     [Area("Author")]
     public class HomeController : Controller
     {

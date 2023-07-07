@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@using CamarasReviews.Utilities
 
 <div class="login px-4">
 @if (SignInManager.IsSignedIn(User))
@@ -10,20 +11,24 @@
                 <i class="ti-user mr-1"></i> @UserManager.GetUserName(User)
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole(RoleConstants.AdminRole))
                 {
-                    <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin</a>
+                    <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Panel de control</a>
                 }
-                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Manage</a>
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
-                    <button type="submit" class="dropdown-item">Logout</button>
+                @if (User.IsInRole(RoleConstants.AuthorRole))
+                {
+                    <a class="dropdown-item" asp-area="Author" asp-controller="Home" asp-action="Index">Panel de control</a>
+                }
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Mi cuenta</a>
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" method="post" asp-route-returnUrl="/">
+                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
                 </form>
             </div>
         </div>}
 else
 {
-        <a class="btn btn-outline-primary ml-1" asp-area="Identity" asp-page="/Account/Login"><i class="ti-user mr-1"></i> Login</a>
-        <a class="btn btn-outline-primary ml-1" asp-area="Identity" asp-page="/Account/Register"><i class="ti-pencil-alt mr-1"></i>Register</a>
+        <a class="btn btn-outline-primary ml-1" asp-area="Identity" asp-page="/Account/Login"><i class="ti-user mr-1"></i> Iniciar sesión</a>
+        <a class="btn btn-outline-primary ml-1" asp-area="Identity" asp-page="/Account/Register"><i class="ti-pencil-alt mr-1"></i>Registrarse</a>
 }
 </div>
 

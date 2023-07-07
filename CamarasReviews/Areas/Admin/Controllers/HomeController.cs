@@ -5,10 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using CamarasReviews.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using CamarasReviews.Utilities;
 
 namespace CamarasReviews.Areas.Admin.Controllers
 {
+    [Authorize(Roles = RoleConstants.AdminRole)]
     [Area("Admin")]
     public class HomeController : Controller
     {

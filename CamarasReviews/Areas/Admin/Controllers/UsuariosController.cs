@@ -4,11 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CamarasReviews.Models;
+using CamarasReviews.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace CamarasReviews.Areas.Admin.Controllers
 {
+    [Authorize(Roles = RoleConstants.AdminRole)]
     [Area("Admin")]
     public class UsuariosController : Controller
     {

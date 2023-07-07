@@ -1,0 +1,244 @@
+@model CamarasReviews.Models.ViewModels.ReviewViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<input type="hidden" name="reviewId" value="@Model.Review.ReviewId" id="reviewId">
+
+<article class="row mb-4">
+    <div class="col-lg-12 mx-auto mb-4">
+        <h1 class="h2 mb-3">@Model.Review.Title</h1>
+        <ul class="list-inline post-meta mb-3">
+            <li class="list-inline-item"><i class="ti-user mr-2"></i><a
+                    href="/Reviews/ReviewsByAuthor/@Model.Review.Author.Id">@Model.Review.Author.FullName</a>
+            </li>
+            <li class="list-inline-item">@Model.Review.CreatedDate.ToString("MMMM dd, yyyy")</li>
+            <li class="list-inline-item">Categories : <a
+                    href="/Reviews/ShowByCategory?categoryId=@Model.Product.CategoryId"
+                    class="ml-1">@Model.Product.Category.Name</a></li>
+            </li>
+        </ul>
+    </div>
+    <div class="col-12 mb-3">
+        <div class="post-slider">
+            @foreach (var imagen in @Model.Review.ReviewImages)
+            {
+                <img loading="lazy" src="@imagen.UrlImagen" class="img-fluid" alt="image"
+                    style="height:450px; object-fit: cover;">
+            }
+        </div>
+    </div>
+    <div class="col-lg-12 mx-auto">
+        <div class="content">
+            <h2 class="h4 mb-3">Breve Descripción: @Model.Review.ShortDescription</h2>
+            <p>@Model.Review.LongDescription</p>
+        </div>
+        <div class="content">
+            <h2 class="h4 mb-3">Producto: @Model.Product.Name</h2>
+            <p>@Model.Product.Description</p>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Características</h3>
+                            <ul class="list-unstyled mb-0">
+                                <li>@Model.Feature.Description</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Pros</h3>
+                            <ul class="list-unstyled mb-0">
+                                <li>@Model.Review.Pros</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Contras</h3>
+                            <ul class="list-unstyled mb-0">
+                                <li>@Model.Review.Cons</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Precio</h3>
+                            <ul class="list-unstyled mb-0">
+                                <li>@Model.Product.Price</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">SKU</h3>
+                            <ul class="list-unstyled mb-0">
+                                <li>@Model.Product.SKU</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Galería de imágenes</h3>
+                            <div class="row">
+                                @foreach (var imagen in @Model.Product.ProductImages)
+                                {
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                        <a href="@imagen.UrlImagen" data-lightbox="product"
+                                            data-title="@Model.Product.Name">
+                                            <img loading="lazy" src="@imagen.UrlImagen" class="img-fluid" alt="image"
+                                                style="height:250px; object-fit: cover;">
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Comentarios</h3>
+                            <!-- Comentarios -->
+                            <div class="card border-0 mb-3" id="comentarios">
+                            </div>
+                            <hr>
+                            <!-- Formulario de comentarios -->
+                            @if (User.IsInRole("User"))
+                            {
+                                <form id="formComment" method="POST">
+                                    <div class="form-group">
+                                        <label for="name">Nombre:</label>
+                                        <input type="text" class="form-control" id="name" name="name" required readonly
+                                            value="@Model.UserName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comment">Comentario:</label>
+                                        <textarea class="form-control" id="comment" name="comment" rows="3"
+                                            required></textarea>
+                                    </div>
+                                    <button type="button" id="btnAgregarComentario" class="btn btn-primary">Enviar
+                                        comentario</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</article>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Obtener comentarios
+            getComments();
+            // Agregar comentario
+            $("#btnAgregarComentario").click(function () {
+                var reviewId = $("#reviewId").val();
+                $.ajax({
+                    url: "/Reviews/Details/PostComment",
+                    type: "POST",
+                    data: {
+                        reviewId: reviewId,
+                        comment: $("#comment").val()
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            toastr.success(data.message);
+                            getComments();
+                            $("#comment").val("");
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+
+        function getComments() {
+            let reviewId = $("#reviewId").val();
+            $.ajax({
+                url: "/Reviews/Details/GetComments",
+                type: "GET",
+                data: {
+                    reviewId: reviewId
+                },
+                success: function (response) {
+                    let comentarios = response.data;
+                    let target = document.querySelector("#comentarios");
+                    target.innerHTML = "";
+                    if (comentarios.length > 0) {
+                        comentarios.forEach(function (comentario) {
+                            let div = document.createElement("div");
+                            div.classList.add("card-body");
+
+                            // Encabezado (Nombre de usuario + Fecha)
+                            let encabezado = document.createElement("div");
+                            encabezado.classList.add("d-flex", "align-items-center", "mb-2");
+
+                            // Icono de usuario
+                            let icono = document.createElement("i");
+                            icono.classList.add("ti-user", "mr-1");
+
+                            // Nombre de usuario
+                            let nombreUsuario = document.createElement("span");
+                            nombreUsuario.innerText = comentario.userName;
+
+                            // Fecha de creación con formato
+                            let fechaCreacion = document.createElement("small");
+                            fechaCreacion.classList.add("text-muted", "ml-2");
+                            fechaCreacion.innerText = new Date(comentario.createdDate).toLocaleDateString("es-ES", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
+
+                            // Agrega los elementos de encabezado
+                            encabezado.appendChild(icono);
+                            encabezado.appendChild(nombreUsuario);
+                            encabezado.appendChild(fechaCreacion);
+
+                            // Comentario
+                            let comentarioElement = document.createElement("p");
+                            comentarioElement.classList.add("card-text");
+                            comentarioElement.innerText = comentario.comment;
+
+                            // Agrega el encabezado y el comentario al div principal
+                            div.appendChild(encabezado);
+                            div.appendChild(comentarioElement);
+
+                            target.appendChild(div);
+                        });
+                    } else {
+                        let div = document.createElement("div");
+                        div.classList.add("card-body");
+                        div.innerText = "No hay comentarios";
+                        target.appendChild(div);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+}
